@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { Link, Route } from "wouter";
 import './App.css'
+
+import Homepage from "./pages/Homepage";
+import Login from "./pages/Login";
 
 function App() {
     return (
         <>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-            </h1>
+            <Route path="/" component={Homepage} />
+            <Route path="/login" component={Login} />
         </>
     )
 }

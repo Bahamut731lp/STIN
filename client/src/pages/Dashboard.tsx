@@ -1,7 +1,13 @@
+import useSWR from 'swr'
+import fetcher from '../lib/Fetcher'
 import AccountWidget from "../components/AccountWidget"
 import { Leave } from "../components/Icons"
+import DepositModal from '../components/DepositModal'
+import { Dialog } from '@headlessui/react'
 
 export default function Dashboard() {
+    //TODO: napojit na API
+    //const { _data, error, isLoading } = useSWR('/api/v1/user', fetcher)
 
     const data = {
         user: {

@@ -1,4 +1,6 @@
+import { useState } from "react";
 import AccountWidgetAction from "./AccountWidgetAction";
+import DepositModal from "./DepositModal";
 import { MiniCard, MiniPlus, MiniPrint } from "./Icons";
 
 interface AccountWidgetProps {
@@ -12,6 +14,8 @@ interface AccountWidgetProps {
 }
 
 export default function AccountWidget(props: AccountWidgetProps) {
+    const [deposit, setDeposit] = useState(false)
+    
     const formatter = new Intl.NumberFormat("cs-CZ", {
         "style": "currency",
         "currency": props.currency
@@ -19,12 +23,13 @@ export default function AccountWidget(props: AccountWidgetProps) {
 
     return (
         <div className="inline-grid gap-8 p-8 bg-neutral-800">
+            <DepositModal isOpen={deposit} setIsOpen={setDeposit} />
             <div className="flex flex-col">
                 <h1 className="text-4xl text-white font-bold">{formatter.format(props.amount)}</h1>
                 <span className="text-neutral-600">{props.identifier.prefix}-{props.identifier.base}/{props.identifier.bank}</span>
             </div>
             <div className="flex gap-16">
-                <AccountWidgetAction onClick={() => alert("Ahoj!")}>
+                <AccountWidgetAction onClick={() => setDeposit(true)}>
                     <MiniPlus/>
                     <span>Vklad</span>
                 </AccountWidgetAction>
@@ -39,6 +44,8 @@ export default function AccountWidget(props: AccountWidgetProps) {
                     <span>Výpis</span>
                 </AccountWidgetAction>
             </div>
+
+  
         </div>
     )
 }

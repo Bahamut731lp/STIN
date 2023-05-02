@@ -25,7 +25,7 @@ export const Modal = ({ isOpen, setIsOpen, children }: ModalProps) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="z-50 w-1/2 h-1/2 bg-neutral-800 p-8 text-white"
+                            className="z-50 w-1/2 h-1/2 bg-neutral-900 p-8 text-white"
                         >
                             {
                                 children ?? null

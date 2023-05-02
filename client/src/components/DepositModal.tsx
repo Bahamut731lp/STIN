@@ -1,27 +1,56 @@
 import { Dialog } from "@headlessui/react";
+import { useState, useContext } from "react";
+
+import Account from "../interface/Account";
+
 import Modal, { ModalProps } from "./Modal";
+import CurrencyCombo from "./CurrencyCombo";
+import AccountSelector from "./AccountSelector";
 
+interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
+    accounts: Account[]
+}
 
-export default function DepositModal(props: Pick<ModalProps, "isOpen" | "setIsOpen">) {
+export default function DepositModal(props: DepositModalProps) {
+    const [value, setValue] = useState(0)
+    const [currency, setCurrency] = useState(null);
+    
     return (
         <Modal {...props}>
-            <Dialog.Title className="text-amber-400 text-3xl">
-                Vklad na účet
-            </Dialog.Title>
-            
+            <div className="flex flex-col gap-4 h-full">
+                <Dialog.Title className="text-amber-400 text-3xl uppercase font-bold">
+                    Vklad na účet
+                </Dialog.Title>
 
-            <button
-                className="w-full m-4 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                onClick={() => props.setIsOpen(false)}
-            >
-                Odeslat
-            </button>
-            <button
-                className="m-4 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                onClick={() => props.setIsOpen(false)}
-            >
-                Zrušit
-            </button>
+                <div className="bg-">
+                    <AccountSelector 
+                        data={props.accounts}
+                    />
+                </div>
+
+
+                <div className="flex gap-2 my-auto">
+                    <input 
+                        type="number"
+                        onChange={(e) => setValue(Number(e.target.value))}
+                        value={value}
+                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight text-4xl"
+                    />
+                    <div className="w-1/6">
+                        <CurrencyCombo/>
+                    </div>
+                </div>
+
+
+                <div className="flex gap-4 mt-auto">
+                    <button
+                        className="w-full inline-flex justify-center border-transparent transition duration-75 px-4 py-2 border hover:bg-amber-400 hover:text-black border-amber-400 text-amber-400 text-base font-medium focus:outline-none sm:w-auto sm:text-sm"
+                        onClick={() => props.setIsOpen(false)}
+                    >
+                        Odeslat
+                    </button>
+                </div>
+            </div>
         </Modal>
     )
 }

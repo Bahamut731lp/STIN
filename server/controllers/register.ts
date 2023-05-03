@@ -1,12 +1,12 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 
 import DATABASE from "../database/initialize.ts";
-import { getPasswordValidity } from "../lib/hash.ts";
+import getPasswordHash from "../lib/hash.ts";
 import require from "../lib/require.ts"
 
 export async function post(context: Context) {
     const body = await context.request.body().value
-    const hasAllRequiredFields = require(body, "email", "password")
+    const hasAllRequiredFields = require(body, "email", "name", "password")
 
     if (hasAllRequiredFields.status == 400) {
         context.response.status = hasAllRequiredFields.status
@@ -14,11 +14,11 @@ export async function post(context: Context) {
         return;
     }
 
-    if ([body.email, body.password].every(v => typeof v != "string")) {
+    if ([body.email, body.name, body.password].every(v => typeof v != "string")) {
         context.response.status = 400
         context.response.body = {
             title: `Malformed Request`,
-            detail: `Email or password is not string`,
+            detail: `Email, name or password is not string`,
             status: 400,
             data: null
         };
@@ -26,34 +26,32 @@ export async function post(context: Context) {
     }
 
     const query = await DATABASE.findOne((document) => document.user.email === body.email)
-    if (query == null) {
-        context.response.status = 404
+    if (query != null) {
+        context.response.status = 409
         context.response.body = {
-            title: `E-mail not found`,
-            detail: `E-mail ${body.email} is not in database.`,
-            status: 404,
+            title: `User already exists.`,
+            detail: `Supplied email is already stored in database.`,
+            status: 409,
             data: null
         };
         return;
     }
 
-    const isPasswordValid = await getPasswordValidity(body.password, query.user.password)
-    if (!isPasswordValid) {
-        context.response.status = 403
-        context.response.body = {
-            title: `Incorrect password`,
-            detail: `Provided password is incorrect.`,
-            status: 403,
-            data: null
-        };
-        return;
-    }
+    const hashedPassword = await getPasswordHash(body.password)
 
-    // NO YOINK
-    query.user.password = ""
+    const response = await DATABASE.insertOne({
+        user: {
+            email: body.email,
+            name: body.name,
+            password: hashedPassword
+        },
+        accounts: []
+    })
+
+    response.user.password = "";
 
     context.response.status = 200
     context.response.body = {
-        data: query
+        data: response
     };
 }

@@ -14,10 +14,6 @@ router
     .get("/ping", Ping.get)
     .get("/db", Database.get)
     .use("/auth", auth_router.routes())
-//  .get("/beers/:id", getBeerDetails)
-//  .post("/beers", createBeer)
-//  .put("/beers/:id", updateBeer)
-//  .delete("/beers/:id", deleteBeer);
 
 const app = new Application();
 

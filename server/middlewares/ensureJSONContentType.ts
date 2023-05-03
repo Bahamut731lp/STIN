@@ -1,4 +1,4 @@
-import { Middleware } from "https://deno.land/x/oak/mod.ts";
+import { Middleware } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 
 const ensureJSON: Middleware = async (ctx, next) => {
     const contentType = ctx.request.headers.get("content-type")

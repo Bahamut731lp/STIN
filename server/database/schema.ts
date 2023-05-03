@@ -1,5 +1,4 @@
 export default interface DatabaseSchema {
-    key: string;
     user: {
         name: string;
         email: string;

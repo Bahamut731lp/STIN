@@ -32,7 +32,7 @@ export function AccountsProvider(props: AccountsProviderProps) {
             amount: 720,
             currency: "JPY",
             identifier: {
-                prefix: "000002",
+                prefix: "000003",
                 base: "1234567890",
                 bank: "0666"
             }

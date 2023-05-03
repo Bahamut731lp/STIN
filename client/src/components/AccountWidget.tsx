@@ -1,9 +1,10 @@
 import { useState, useContext } from "react";
-import AccountWidgetAction from "./AccountWidgetAction";
-import DepositModal from "./DepositModal";
-import { MiniCard, MiniPlus, MiniPrint } from "./Icons";
 
+import { MiniCard, MiniPlus, MiniPrint } from "./Icons";
+import AccountWidgetAction from "./AccountWidgetAction";
 import AccountsContext from "./AccountsContext";
+import DepositModal from "./DepositModal";
+import PaymentModal from "./PaymentModal";
 
 interface AccountWidgetProps {
     amount: number;
@@ -17,6 +18,8 @@ interface AccountWidgetProps {
 
 export default function AccountWidget(props: AccountWidgetProps) {
     const [deposit, setDeposit] = useState(false)
+    const [payment, setPayment] = useState(false)
+    
     const [_accounts] = useContext(AccountsContext)
     
     const formatter = new Intl.NumberFormat("cs-CZ", {
@@ -27,7 +30,10 @@ export default function AccountWidget(props: AccountWidgetProps) {
 
     return (
         <div className="inline-grid gap-8 p-8 bg-neutral-800">
+
             <DepositModal isOpen={deposit} setIsOpen={setDeposit} accounts={_accounts}/>
+            <PaymentModal isOpen={payment} setIsOpen={setPayment} accounts={_accounts}/>
+
             <div className="flex flex-col">
                 <h1 className="text-4xl text-white font-bold">{formatter.format(props.amount)}</h1>
                 <span className="text-neutral-600">{props.identifier.prefix}-{props.identifier.base}/{props.identifier.bank}</span>
@@ -38,7 +44,7 @@ export default function AccountWidget(props: AccountWidgetProps) {
                     <span>Vklad</span>
                 </AccountWidgetAction>
 
-                <AccountWidgetAction onClick={() => alert("Ahoj!")}>
+                <AccountWidgetAction onClick={() => setPayment(true)}>
                     <MiniCard/>
                     <span>Zaplatit</span>
                 </AccountWidgetAction>

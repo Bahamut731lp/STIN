@@ -8,11 +8,11 @@ import CurrencyCombo from "./CurrencyCombo";
 import AccountSelector from "./AccountSelector";
 import { XMark } from "./Icons";
 
-interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
+interface PaymentModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
 }
 
-export default function DepositModal(props: DepositModalProps) {
+export default function PaymentModal(props: PaymentModalProps) {
     const [value, setValue] = useState(0)
     const [currency, setCurrency] = useState(null);
     
@@ -21,7 +21,7 @@ export default function DepositModal(props: DepositModalProps) {
             <div className="flex flex-col gap-4 h-full">
                 <div className="flex justify-between">
                     <Dialog.Title className="text-amber-400 text-3xl uppercase font-bold">
-                        Vklad na účet
+                        Zaplatit
                     </Dialog.Title>
 
                     <button onClick={() => props.setIsOpen(false)}>

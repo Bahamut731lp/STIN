@@ -1,5 +1,5 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-
+import ensureJSONContentType from "./middlewares/ensureJSONContentType.ts";
 
 
 const router = new Router();
@@ -20,6 +20,9 @@ router
 //  .delete("/beers/:id", deleteBeer);
 
 const app = new Application();
+
+app.use(ensureJSONContentType);
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 

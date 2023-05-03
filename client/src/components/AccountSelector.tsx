@@ -19,7 +19,7 @@ export default function AccountSelector({ data }: AccountSelectorProps) {
     return (
         <Listbox value={selectedPerson} onChange={setSelectedPerson} as="div" className="relative">
             <Listbox.Button
-                className="bg-neutral-950 p-4 w-full text-left flex justify-between"
+                className="bg-neutral-800 p-4 w-full text-left flex justify-between"
             >
                 <span className="text-neutral-100">{selectedPerson.identifier.prefix}-{selectedPerson.identifier.base}/{selectedPerson.identifier.bank}</span>
                 <span className="text-neutral-400 flex gap-2 items-center">{selectedPerson.currency} <MiniChevron /></span>

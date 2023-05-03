@@ -18,7 +18,7 @@ export const Modal = ({ isOpen, setIsOpen, children }: ModalProps) => {
                         as={motion.div}
                         open={isOpen}
                         onClose={() => setIsOpen(false)}
-                        className="fixed inset-0 z-10 overflow-y-auto grid place-items-center"
+                        className="fixed inset-0 z-10 flex items-center justify-center"
                         >
                         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
                         <motion.div

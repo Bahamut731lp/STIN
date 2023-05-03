@@ -5,6 +5,8 @@ import AccountWidgetAction from "./AccountWidgetAction";
 import AccountsContext from "./AccountsContext";
 import DepositModal from "./DepositModal";
 import PaymentModal from "./PaymentModal";
+import AccountHistoryModal from "./AccountHistoryModal";
+import getCurrencyFormatter from "../lib/CurrencyFormatter";
 
 interface AccountWidgetProps {
     amount: number;
@@ -19,23 +21,19 @@ interface AccountWidgetProps {
 export default function AccountWidget(props: AccountWidgetProps) {
     const [deposit, setDeposit] = useState(false)
     const [payment, setPayment] = useState(false)
+    const [transactionHistory, setTransactionHistory] = useState(false)
     
     const [_accounts] = useContext(AccountsContext)
-    
-    const formatter = new Intl.NumberFormat("cs-CZ", {
-        "style": "currency",
-        "currency": props.currency
-    });
-
 
     return (
         <div className="inline-grid gap-8 p-8 bg-neutral-800">
 
             <DepositModal isOpen={deposit} setIsOpen={setDeposit} accounts={_accounts}/>
             <PaymentModal isOpen={payment} setIsOpen={setPayment} accounts={_accounts}/>
+            <AccountHistoryModal isOpen={transactionHistory} setIsOpen={setTransactionHistory} accounts={_accounts}/>
 
             <div className="flex flex-col">
-                <h1 className="text-4xl text-white font-bold">{formatter.format(props.amount)}</h1>
+                <h1 className="text-4xl text-white font-bold">{getCurrencyFormatter(props.currency).format(props.amount)}</h1>
                 <span className="text-neutral-600">{props.identifier.prefix}-{props.identifier.base}/{props.identifier.bank}</span>
             </div>
             <div className="flex justify-between">
@@ -49,7 +47,7 @@ export default function AccountWidget(props: AccountWidgetProps) {
                     <span>Zaplatit</span>
                 </AccountWidgetAction>
 
-                <AccountWidgetAction onClick={() => alert("Ahoj!")}>
+                <AccountWidgetAction onClick={() => setTransactionHistory(true)}>
                     <MiniPrint/>
                     <span>Výpis</span>
                 </AccountWidgetAction>

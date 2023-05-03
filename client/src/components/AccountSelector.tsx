@@ -19,7 +19,7 @@ export default function AccountSelector({ data }: AccountSelectorProps) {
     return (
         <Listbox value={selectedPerson} onChange={setSelectedPerson} as="div" className="relative">
             <Listbox.Button
-                className="bg-neutral-800 p-4 w-full text-left flex justify-between"
+                className="bg-neutral-800 p-4 w-full text-left flex justify-between items-center"
             >
                 <span className="text-neutral-100">{selectedPerson.identifier.prefix}-{selectedPerson.identifier.base}/{selectedPerson.identifier.bank}</span>
                 <span className="text-neutral-400 flex gap-2 items-center">{selectedPerson.currency} <MiniChevron /></span>
@@ -32,7 +32,7 @@ export default function AccountSelector({ data }: AccountSelectorProps) {
                         <Listbox.Option
                             key={index}
                             value={account}
-                            className="flex justify-between cursor-pointer hover:bg-neutral-600 p-4"
+                            className="flex justify-between items-center cursor-pointer hover:bg-neutral-600 p-4"
                         >
                             <span className="text-neutral-400">{account.identifier.prefix}-{account.identifier.base}/{account.identifier.bank}</span>
                             <span className="text-neutral-400 flex gap-2 items-center">{account.currency}</span>

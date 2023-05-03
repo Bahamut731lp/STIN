@@ -20,7 +20,7 @@ export default function PaymentModal(props: PaymentModalProps) {
         <Modal {...props}>
             <div className="flex flex-col gap-4 h-full">
                 <div className="flex justify-between">
-                    <Dialog.Title className="text-amber-400 text-3xl uppercase font-bold">
+                    <Dialog.Title className="text-amber-400 text-xl lg:text-3xl uppercase font-bold">
                         Zaplatit
                     </Dialog.Title>
 
@@ -29,21 +29,21 @@ export default function PaymentModal(props: PaymentModalProps) {
                     </button>
                 </div>
 
-                <div className="bg-">
+                <div>
                     <AccountSelector 
                         data={props.accounts}
                     />
                 </div>
 
 
-                <div className="flex gap-2 my-auto">
+                <div className="flex flex-col sm:flex-row gap-2 my-auto">
                     <input 
                         type="number"
                         onChange={(e) => setValue(Number(e.target.value))}
                         value={value}
-                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight text-4xl"
+                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight text-xl lg:text-4xl"
                     />
-                    <div className="w-1/6">
+                    <div className="w-full sm:w-1/6">
                         <CurrencyCombo/>
                     </div>
                 </div>

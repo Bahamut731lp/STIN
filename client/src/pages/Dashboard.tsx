@@ -17,10 +17,10 @@ function Dashboard() {
 
     return (
         <div className="w-screen min-h-screen flex flex-col">
-            <nav className="grid grid-cols-3 items-baseline bg-neutral-900 text-white p-8">
-                <h1 className="bg-gradient-to-bl from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text font-extrabold uppercase tracking-tighter text-transparent text-xl">Pompejská spořitelna</h1>
-                <span className='text-center'>{data.user.name}</span>
-                <button className="text-amber-400 place-self-end">
+            <nav className="grid grid-cols-2 sm:grid-cols-3 items-center bg-neutral-900 text-white p-8">
+                <h1 className="hidden sm:block bg-gradient-to-bl from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text font-extrabold uppercase tracking-tighter text-transparent text-xl">Pompejská spořitelna</h1>
+                <span className='text-left sm:text-center'>{data.user.name}</span>
+                <button className="text-amber-400 justify-self-end">
                     <Leave />
                 </button>
             </nav>

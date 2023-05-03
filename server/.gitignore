@@ -1,3 +1,4 @@
 .env
 cov_profile/
 .vscode
+db.json

@@ -5,7 +5,7 @@ interface AccountWidgetActionProps {
 
 export default function AccountWidgetAction(props: AccountWidgetActionProps) {
     return (
-        <button className="flex gap-2 text-amber-400" onClick={props.onClick}>
+        <button className="flex gap-2 text-amber-400 hover:text-amber-200 transition duration-75" onClick={props.onClick}>
             { props.children }
         </button>
     )

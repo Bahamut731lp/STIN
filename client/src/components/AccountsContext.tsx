@@ -18,6 +18,24 @@ export function AccountsProvider(props: AccountsProviderProps) {
                 base: "1234567890",
                 bank: "0666"
             }
+        },
+        {
+            amount: 666,
+            currency: "EUR",
+            identifier: {
+                prefix: "000002",
+                base: "1234567890",
+                bank: "0666"
+            }
+        },
+        {
+            amount: 720,
+            currency: "JPY",
+            identifier: {
+                prefix: "000002",
+                base: "1234567890",
+                bank: "0666"
+            }
         }
     ]), [])
 

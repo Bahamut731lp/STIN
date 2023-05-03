@@ -18,14 +18,12 @@ interface AccountWidgetProps {
 export default function AccountWidget(props: AccountWidgetProps) {
     const [deposit, setDeposit] = useState(false)
     const [_accounts] = useContext(AccountsContext)
-    const t = useContext(AccountsContext)
-
-    console.log(t, _accounts)
     
     const formatter = new Intl.NumberFormat("cs-CZ", {
         "style": "currency",
         "currency": props.currency
     });
+
 
     return (
         <div className="inline-grid gap-8 p-8 bg-neutral-800">
@@ -34,7 +32,7 @@ export default function AccountWidget(props: AccountWidgetProps) {
                 <h1 className="text-4xl text-white font-bold">{formatter.format(props.amount)}</h1>
                 <span className="text-neutral-600">{props.identifier.prefix}-{props.identifier.base}/{props.identifier.bank}</span>
             </div>
-            <div className="flex gap-16">
+            <div className="flex justify-between">
                 <AccountWidgetAction onClick={() => setDeposit(true)}>
                     <MiniPlus/>
                     <span>Vklad</span>

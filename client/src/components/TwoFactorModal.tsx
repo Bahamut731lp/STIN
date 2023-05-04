@@ -1,3 +1,4 @@
+import { useLocation } from 'wouter';
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import DigitInput from './DigitInput';
@@ -11,6 +12,7 @@ interface TwoFactorModalProps {
 export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFactorModalProps) {
     const DIGITS = 6;
 
+    const [location, setLocation] = useLocation();
     const [token, setToken] = useState("");
 
 
@@ -27,7 +29,12 @@ export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFacto
 
         const response = await fetch('http://localhost:8000/auth/validate', options);
         const json = await response.json();
-        console.log(json);
+        
+        if (json.data.isValid) {
+            //TODO: Uložení do cookies, resp. možná i localstorage, uvidíme?
+            //TODO: Invalidace na serveru
+            setLocation("/dashboard")
+        }
     }
 
     return (

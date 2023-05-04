@@ -38,14 +38,6 @@ export async function post(context: Context) {
         };
         return;
     }
-
-    if (session.token != undefined) {
-        context.response.status = 200;
-        context.response.body = {
-            data: `Already authorized`
-        };
-        return;
-    }
     
     const query = await getUser(body.email)
     const totp = getTwoFactorObject(query.data!.user.secret.uri ?? "")

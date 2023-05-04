@@ -1,6 +1,6 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-
 import DATABASE from "../database/initialize.ts";
+import getTwoFactorSecret from "../lib/getTwoFactorSecret.ts";
 import getPasswordHash from "../lib/hash.ts";
 import require from "../lib/require.ts"
 
@@ -38,17 +38,22 @@ export async function post(context: Context) {
     }
 
     const hashedPassword = await getPasswordHash(body.password)
+    const twoFactor = await getTwoFactorSecret(body.email);
 
     const response = await DATABASE.insertOne({
         user: {
             email: body.email,
             name: body.name,
-            password: hashedPassword
+            password: hashedPassword,
+            secret: {
+                uri: twoFactor.uri
+            }
         },
-        accounts: []
+        accounts: [],
     })
 
     response.user.password = "";
+    response.user.secret.qr = String(twoFactor.qr)
 
     context.response.status = 200
     context.response.body = {

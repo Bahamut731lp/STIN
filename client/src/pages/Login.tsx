@@ -3,11 +3,13 @@ import Image from "../assets/pavellopata.jpg"
 import Input from "../components/Input"
 import toast from 'react-hot-toast';
 import CustomToaster, { Toast } from "../components/Toast";
+import TwoFactorModal from "../components/TwoFactorModal";
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
 
     async function getResult() {
         const options: RequestInit = {
@@ -26,8 +28,10 @@ export default function Login() {
         const t = toast.custom(<Toast>{}</Toast>);
         const result = await getResult();
 
-        if (String(result.status).startsWith("2")) toast.success("Byly zadány správné přihlašovací údaje", {id: t})
+        if (String(result.status).startsWith("2")) toast.success("Byly zadány správné přihlašovací údaje", {id: t});
         else toast.error(result.title, {id: t})
+
+        if ([200, 401].some(v => result.status == v)) setIsOpen(true);
     }
 
     return (
@@ -69,6 +73,7 @@ export default function Login() {
                 </div>
             </div>
             <CustomToaster />
+            <TwoFactorModal isOpen={isOpen} setIsOpen={setIsOpen} mail={email}/>
         </main>
     )
 }

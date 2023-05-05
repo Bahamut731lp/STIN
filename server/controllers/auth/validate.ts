@@ -32,9 +32,9 @@ export async function post(context: Context) {
     if (new Date(String(session.expiration ?? "")) < new Date()) {
         await SESSIONS.deleteOne((document) => document.email == body.email)
 
-        context.response.status = 498
+        context.response.status = 401
         context.response.body = {
-            status: 498,
+            status: 401,
             title: "Token expired",
             detail: `Session for ${body.email} has already expired.`,
             data: null

@@ -1,9 +1,7 @@
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
-import { assert } from "https://deno.land/std@0.186.0/testing/asserts.ts";
-
+import { assertNotEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
 import db from "../database/initialize.ts";
 import app from "../server.ts"
-import { assertNotEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
 
 Deno.test("Register #1: No request body", async () => {
     const request = await superoak(app);

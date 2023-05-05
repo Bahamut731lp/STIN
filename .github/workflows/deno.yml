@@ -44,9 +44,9 @@ jobs:
         run: deno coverage cov_profile --lcov --output=cov_profile.lcov
 
       - name: Collect coverage
-        uses: codecov/codecov-action@v1.0.10 # upload the report on Codecov
+        uses: acid-chicken/lcov-reporter-action@v0.4.1
         with:
-          file: ./cov_profile.lcov
+          lcov-file: cov_profile.lcov
 
       # Uncomment this step to verify the use of 'deno fmt' on each commit.
       # - name: Verify formatting

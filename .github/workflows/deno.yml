@@ -60,11 +60,12 @@ jobs:
             gistID: 723c91b7a31aa9f66b300de3fd1dd650
             filename: test.json
             label: Test Coverage
-            message: ${{ env.ANSWER }}\%
+            message: ${{ env.ANSWER }}%
             valColorRange: ${{ env.ANSWER }}
             maxColorRange: 100
             minColorRange: 70
             color: orange
+            style: "for-the-badge"
     
 
       # Uncomment this step to verify the use of 'deno fmt' on each commit.

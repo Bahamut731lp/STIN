@@ -1,9 +1,9 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 
-import SESSIONS from "../../database/sessions.js";
-import require from "../../lib/require.js"
-import getUser from "../../database/getUser.js"
-import getTwoFactorObject from "../../lib/getTwoFactorObject.js";
+import SESSIONS from "../../database/sessions.ts";
+import require from "../../lib/require.ts"
+import getUser from "../../database/getUser.ts"
+import getTwoFactorObject from "../../lib/getTwoFactorObject.ts";
 
 export async function post(context: Context) {
     //Defaultně v milisekundách, proto takové násobení, abychom to převedli v hodiny
@@ -67,6 +67,7 @@ export async function post(context: Context) {
         status: 200,
         data: {
             isValid,
+            email: body.email,
             token: totp.generate()
         }
     };

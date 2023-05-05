@@ -1,15 +1,48 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "../assets/pavellopata.jpg"
 import Input from "../components/Input"
 import toast from 'react-hot-toast';
 import CustomToaster, { Toast } from "../components/Toast";
 import TwoFactorModal from "../components/TwoFactorModal";
+import { useLocation } from "wouter";
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+    const [, setLocation] = useLocation();
+
+    useEffect(() => {
+        /**
+         * Funkce pro vyzkoušení, jestli náhodou nemáme aktivní session
+         * Pokud totiž jo, tak skipneme přihlašování
+         */
+        async function tryExistingSession() {
+            const session = atob(localStorage.getItem("_ps_sess") ?? "");
+            let email, token;
+
+            try {
+                const json = JSON.parse(session);
+                email = json.email;
+                token = json.token;
+            } catch (error) {
+                return;
+            }
+
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, token })
+            };
+
+            const response = await fetch('http://localhost:8000/auth/validate', options);
+            if (response.status == 200) setLocation("/dashboard");
+        }
+
+        tryExistingSession();
+    })
+
 
     async function getResult() {
         const options: RequestInit = {

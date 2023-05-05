@@ -1,11 +1,8 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import getUser from "../../database/getUser.js";
-
-import DATABASE from "../../database/initialize.js";
-import SESSIONS from "../../database/sessions.js";
-
-import { getPasswordValidity } from "../../lib/hash.js";
-import require from "../../lib/require.js"
+import getUser from "../../database/getUser.ts";
+import { getPasswordValidity } from "../../lib/hash.ts";
+import SESSIONS from "../../database/sessions.ts";
+import require from "../../lib/require.ts"
 
 export async function post(context: Context) {
     const body = await context.request.body().value

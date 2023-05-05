@@ -18,6 +18,17 @@ export async function post(context: Context) {
         return;
     }
 
+    if (body.email != session.email) {
+        context.response.status = 404
+        context.response.body = {
+            status: 404,
+            title: "No Session Found",
+            detail: `Provided email has not valid session active.`,
+            data: null
+        };
+        return;
+    }
+
     if (body.token != session.token) {
         context.response.status = 403
         context.response.body = {
@@ -29,21 +40,13 @@ export async function post(context: Context) {
         return;
     }
 
-    if (new Date(session.expiration) < new Date()) {
-        await SESSIONS.deleteOne((document) => document.email == body.email)
-
-        context.response.status = 498
-        context.response.body = {
-            status: 498,
-            title: "Token expired",
-            detail: `Session for ${body.email} has already expired.`,
-            data: null
-        };
-        return;
-    }
+    await SESSIONS.deleteOne((document) => document.email == body.email)
 
     context.response.status = 200
     context.response.body = {
-        data: session
+        data: {
+            status: 200,
+            data: true
+        }
     };
 }

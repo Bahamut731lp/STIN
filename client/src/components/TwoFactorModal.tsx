@@ -27,12 +27,11 @@ export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFacto
             body: JSON.stringify({ email: props.mail, token })
         };
 
-        const response = await fetch('http://localhost:8000/auth/validate', options);
+        const response = await fetch('http://localhost:8000/auth/twofactor', options);
         const json = await response.json();
         
         if (json.data.isValid) {
-            //TODO: Uložení do cookies, resp. možná i localstorage, uvidíme?
-            //TODO: Invalidace na serveru
+            localStorage.setItem("_ps_sess", btoa(options.body));
             setLocation("/dashboard")
         }
     }

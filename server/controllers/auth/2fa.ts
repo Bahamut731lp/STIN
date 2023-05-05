@@ -1,11 +1,13 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 
-import SESSIONS from "../database/sessions.ts";
-import require from "../lib/require.ts"
-import getUser from "../database/getUser.ts"
-import getTwoFactorObject from "../lib/getTwoFactorObject.ts";
+import SESSIONS from "../../database/sessions.js";
+import require from "../../lib/require.js"
+import getUser from "../../database/getUser.js"
+import getTwoFactorObject from "../../lib/getTwoFactorObject.js";
 
 export async function post(context: Context) {
+    //Defaultně v milisekundách, proto takové násobení, abychom to převedli v hodiny
+    const TOKEN_VALIDITY = 5 * 3600 * 1000
     const body = await context.request.body().value
     const hasAllRequiredFields = require(body, "email", "token")
 
@@ -55,12 +57,14 @@ export async function post(context: Context) {
     }
 
     await SESSIONS.updateOne((document) => document.email == body.email, (document) => {
-        document.token = body.token
+        document.token = body.token;
+        document.expiration = new Date(new Date().getTime() + TOKEN_VALIDITY).toISOString()
         return document;
     });
 
     context.response.status = 200
     context.response.body = {
+        status: 200,
         data: {
             isValid,
             token: totp.generate()

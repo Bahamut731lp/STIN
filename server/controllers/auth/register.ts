@@ -1,8 +1,8 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import DATABASE from "../database/initialize.ts";
-import getTwoFactorSecret from "../lib/getTwoFactorSecret.ts";
-import getPasswordHash from "../lib/hash.ts";
-import require from "../lib/require.ts"
+import DATABASE from "../../database/initialize.js";
+import getTwoFactorSecret from "../../lib/getTwoFactorSecret.js";
+import getPasswordHash from "../../lib/hash.js";
+import require from "../../lib/require.js"
 
 export async function post(context: Context) {
     const body = await context.request.body().value

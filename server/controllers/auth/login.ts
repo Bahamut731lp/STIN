@@ -1,11 +1,11 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import getUser from "../database/getUser.ts";
+import getUser from "../../database/getUser.js";
 
-import DATABASE from "../database/initialize.ts";
-import SESSIONS from "../database/sessions.ts";
+import DATABASE from "../../database/initialize.js";
+import SESSIONS from "../../database/sessions.js";
 
-import { getPasswordValidity } from "../lib/hash.ts";
-import require from "../lib/require.ts"
+import { getPasswordValidity } from "../../lib/hash.js";
+import require from "../../lib/require.js"
 
 export async function post(context: Context) {
     const body = await context.request.body().value
@@ -40,11 +40,9 @@ export async function post(context: Context) {
 
     if (session != null) {        
         if (session.token == undefined) {
-            context.response.status = 401;
+            context.response.status = 200;
             context.response.body = {
-                title: `Not authorized by second factor`,
-                detail: `Check your email for 2FA code.`,
-                status: 401,
+                status: 200,
                 data: {
                     twofactor: false
                 },

@@ -12,7 +12,7 @@ interface TwoFactorModalProps {
 export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFactorModalProps) {
     const DIGITS = 6;
 
-    const [location, setLocation] = useLocation();
+    const [, setLocation] = useLocation();
     const [token, setToken] = useState("");
 
 

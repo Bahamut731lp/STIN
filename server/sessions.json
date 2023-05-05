@@ -1,1 +1,7 @@
-[]
+[
+	{
+		"email": "test@test.cz",
+		"token": "312980",
+		"expiration": "2023-05-05T20:51:04.209Z"
+	}
+]

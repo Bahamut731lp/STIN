@@ -15,6 +15,23 @@ const ensureJSON: Middleware = async (ctx, next) => {
         return;
     }
 
+    if (ctx.request.hasBody) {
+        try {
+            const body = await ctx.request.body().value;
+            JSON.parse(JSON.stringify(body));
+        }
+        catch(_) {
+            ctx.response.status = 400
+            ctx.response.type = "application/json"
+            ctx.response.body = {
+                title: "Malformed JSON Body",
+                detail: `Supplied body is malformed.`,
+                status: 400
+            }    
+            return;
+        }
+    }
+
     await next();
 };
 

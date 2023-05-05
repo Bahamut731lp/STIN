@@ -29,7 +29,7 @@ export async function post(context: Context) {
         return;
     }
 
-    if (new Date(session.expiration) < new Date()) {
+    if (new Date(String(session.expiration ?? "")) < new Date()) {
         await SESSIONS.deleteOne((document) => document.email == body.email)
 
         context.response.status = 498

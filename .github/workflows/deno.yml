@@ -50,13 +50,10 @@ jobs:
 
             
       - name: Install lcov-summary
-        run: npm i lcov-summary
-    
-      - name: Test Coverage
-        run: lcov-summary .\cov_profile.lcov
-        
-      - name: Get Total Coverage
-        run: lcov-summary .\cov_profile.lcov | grep "Total Coverage" | cut -d ":" -f 2 | sed -r 's/[%]+//g' | xargs | sed 's/^/ANSWER=/' >> $GITHUB_ENV
+        run: |
+            npm i lcov-summary
+            lcov-summary .\cov_profile.lcov
+            lcov-summary .\cov_profile.lcov | grep "Total Coverage" | cut -d ":" -f 2 | sed -r 's/[%]+//g' | xargs | sed 's/^/ANSWER=/' >> $GITHUB_ENV
 
       - name: Create Code Coverage Badge
         uses: schneegans/dynamic-badges-action@v1.6.0

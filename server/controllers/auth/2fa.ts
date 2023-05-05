@@ -51,7 +51,9 @@ export async function post(context: Context) {
             title: "Not a valid token",
             detail: "Token provided in request body is not valid.",
             status: 401,
-            data: null
+            data: {
+                isValid
+            }
         }
         return;
     }

@@ -2,6 +2,7 @@ import { useLocation } from 'wouter';
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import DigitInput from './DigitInput';
+import toast from 'react-hot-toast';
 
 interface TwoFactorModalProps {
     mail: string;
@@ -33,6 +34,8 @@ export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFacto
         if (json.data.isValid) {
             localStorage.setItem("_ps_sess", btoa(options.body));
             setLocation("/dashboard")
+        } else {
+            toast.error("Kód dvoufázového ověření není správný");
         }
     }
 

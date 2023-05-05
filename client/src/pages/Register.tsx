@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Input from "../components/Input"
-import toast from 'react-hot-toast';
-import CustomToaster, { Toast } from "../components/Toast";
-import { useLocation } from "wouter";
+import CustomToaster from "../components/Toast";
 import QRCodeModal from "../components/QRCodeModal";
 
 export default function Register() {
@@ -30,7 +28,7 @@ export default function Register() {
         const json = await response.json();
 
         if (!String(response.status).startsWith("2")) return;
-        
+
         setQR(json.data.user.secret.qr)
         setQRModal(true);
     }

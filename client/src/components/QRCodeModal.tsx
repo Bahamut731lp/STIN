@@ -4,7 +4,6 @@ import { Fragment } from 'react'
 
 interface QRCodeModalProps {
     isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     qr: string;
     mail: string;
 }

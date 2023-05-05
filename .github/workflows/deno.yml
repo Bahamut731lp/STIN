@@ -34,11 +34,6 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-            node-version: 16
-            
       - name: Run linter
         run: deno lint
     
@@ -52,7 +47,11 @@ jobs:
       - name: Install lcov-summary
         run: |
             npm i lcov-summary
-            lcov-summary .\cov_profile.lcov | grep "Total Coverage" | cut -d ":" -f 2 | sed -r 's/[%]+//g' | xargs | sed 's/^/ANSWER=/' >> $GITHUB_ENV
+            lcov-summary .\cov_profile.lcov >> "$GITHUB_ENV"
+
+      - name: Print variables
+        run: |
+            echo "${{ env }}"
 
       - name: Create Code Coverage Badge
         uses: schneegans/dynamic-badges-action@v1.6.0
@@ -66,6 +65,7 @@ jobs:
             maxColorRange: 100
             minColorRange: 70
             color: orange
+    
 
       # Uncomment this step to verify the use of 'deno fmt' on each commit.
       # - name: Verify formatting

@@ -7,7 +7,7 @@ const DATABASE = new Database<DatabaseSchema>({
     pretty: true,
     autoload: true,
     autosave: true,
-    optimize: true,
+    optimize: false,
     immutable: true,
 });
 

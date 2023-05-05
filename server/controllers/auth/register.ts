@@ -14,17 +14,6 @@ export async function post(context: Context) {
         return;
     }
 
-    if ([body.email, body.name, body.password].every(v => typeof v != "string")) {
-        context.response.status = 400
-        context.response.body = {
-            title: `Malformed Request`,
-            detail: `Email, name or password is not string`,
-            status: 400,
-            data: null
-        };
-        return;
-    }
-
     const query = await DATABASE.findOne((document) => document.user.email === body.email)
     if (query != null) {
         context.response.status = 409

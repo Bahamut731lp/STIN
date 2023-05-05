@@ -47,7 +47,7 @@ jobs:
       - name: Install lcov-summary
         run: |
             npm i -g lcov-summary
-            lcov-summary .\cov_profile.lcov >> "$GITHUB_ENV"
+            lcov-summary ./cov_profile.lcov >> "$GITHUB_ENV"
 
       - name: Print variables
         run: |

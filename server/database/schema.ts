@@ -1,9 +1,13 @@
 export default interface DatabaseSchema {
-    key: string;
+    twofactor?: boolean;
     user: {
         name: string;
         email: string;
         password: string;
+        secret: {
+            uri: string;
+            qr?: string;
+        }
     }
     accounts: {
         amount: number,

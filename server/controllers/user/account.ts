@@ -6,7 +6,6 @@ function getPrefixNumber() {
 }
 
 export async function post(context: Context) {
-    console.log("ACCOUNT POST 0!", context.request.headers.get("authorization"));
     const body = await context.request.body().value;
     const [email] = atob(context.request.headers.get("authorization")?.split(/\s+/gi)?.pop() ?? "")?.split(":") ?? [null, null];
     
@@ -52,8 +51,6 @@ export async function post(context: Context) {
             return document;
         }
     );
-
-    console.log("ACCOUNT POST 5!");
 
     return;
 }

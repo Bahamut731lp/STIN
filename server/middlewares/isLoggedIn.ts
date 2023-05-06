@@ -5,12 +5,12 @@ const isLoggedIn: Middleware = async (ctx, next) => {
     const auth: string | null = ctx.request.headers.get("authorization");
 
     if (!auth) {
-        ctx.response.status = 401
+        ctx.response.status = 400
         ctx.response.type = "application/json"
         ctx.response.body = {
             title: "Unauthenticated",
             detail: `To perform this operation, request must bear proper authorization header`,
-            status: 401
+            status: 400
         }
 
         return;
@@ -25,7 +25,7 @@ const isLoggedIn: Middleware = async (ctx, next) => {
         if (!result) throw new Error();
 
         await next();
-        return
+        return;
 
     } catch (_) {
         ctx.response.status = 401

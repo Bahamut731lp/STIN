@@ -1,20 +1,21 @@
 import useSWR from "swr";
 import AccountWidget from "../components/AccountWidget"
 import AccountsContext, { AccountsProvider } from '../components/AccountsContext'
-import { Leave } from "../components/Icons"
-import { useContext, useEffect } from "react"
-import { useLocation } from "wouter";
 import AccountCreationModal from "../components/AccountCreationModal";
+import { useContext, useEffect, useState } from "react"
+import { useLocation } from "wouter";
+import { Leave } from "../components/Icons"
+import Button from "../components/Button";
 
 async function fetcher(url: string) {
     const session = localStorage.getItem("_ps_sess");
-    
+
     //TODO: Přesměrovat dopiče
     if (!session) throw new Error();
-    const {email, token} = JSON.parse(atob(session ?? ""))
+    const { email, token } = JSON.parse(atob(session ?? ""))
     const options = {
         method: 'GET',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
             "Authorization": `Basic ${btoa(`${email}:${token}`)}`
         }
@@ -29,10 +30,12 @@ async function fetcher(url: string) {
 }
 
 function Dashboard() {
-    const {data, error, isLoading} = useSWR('http://localhost:8000/user', fetcher)
+    const [accountCreation, setAccountCreation] = useState(false);
 
+    const { data, isLoading } = useSWR('http://localhost:8000/user', fetcher)
     const [_accounts, _setAccounts] = useContext(AccountsContext);
     const [, setLocation] = useLocation();
+
 
     //Tady řešíme co s odpovědí od serveru
     useEffect(() => {
@@ -54,12 +57,17 @@ function Dashboard() {
                     isLoading ? (
                         <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4 animate-pulse"></div>
                     ) : (
-                        <span className='text-left sm:text-center text-xl font-light'>{ data.user.name }</span>
+                        <span className='text-left sm:text-center text-xl font-light'>{data.user.name}</span>
                     )
                 }
-                <button className="text-amber-400 justify-self-end" onClick={handleLogout}>
-                    <Leave />
-                </button>
+                <span className="flex justify-end gap-4">
+                    <Button className="text-xs" onClick={() => setAccountCreation(true)}>
+                        Nový účet
+                    </Button>
+                    <button className="text-amber-400 justify-self-end" onClick={handleLogout}>
+                        <Leave />
+                    </button>
+                </span>
             </nav>
             <main className="bg-neutral-950 flex-1 p-8">
 
@@ -79,7 +87,7 @@ function Dashboard() {
                 </div>
             </main>
 
-            <AccountCreationModal isOpen={true} accounts={_accounts} setIsOpen={() => {}}/>
+            <AccountCreationModal isOpen={accountCreation} accounts={_accounts} setIsOpen={setAccountCreation} />
         </div>
     )
 }

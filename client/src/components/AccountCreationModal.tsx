@@ -13,7 +13,19 @@ export default function AccountCreationModal(props: PaymentModalProps) {
     const hasAccountWithCurrency = props.accounts.find((value) => value.currency == currency)
 
     async function createAccount() {
-        //TODO: Fetch
+        const {email, token} = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
+
+        const options = {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                "Authorization": `Basic ${btoa(`${email}:${token}`)}`
+            },
+            body: JSON.stringify({currency})
+        };
+
+        await fetch('http://localhost:8000/user/account/new', options)
+        props.setIsOpen(false);
     }
 
     return (

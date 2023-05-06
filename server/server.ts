@@ -5,18 +5,18 @@ import isLoggedIn from "./middlewares/isLoggedIn.ts";
 
 const router = new Router();
 
-import auth_router from "./routers/auth.ts"
+import Auth from "./routers/auth.ts"
+import User from "./routers/user.ts";
 import * as Root from "./controllers/root.ts"
 import * as Ping from "./controllers/ping.ts"
 import * as Database from "./controllers/database.ts"
-import * as User from "./controllers/user.ts";
 
 router
     .get("/", Root.get)
     .get("/ping", Ping.get)
     .get("/db", Database.get)
-    .get("/user", isLoggedIn, User.get)
-    .use("/auth", auth_router.routes())
+    .use("/user", isLoggedIn, User.routes())
+    .use("/auth", Auth.routes())
 
 const app = new Application();
 app.use(oakCors())

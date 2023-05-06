@@ -20,7 +20,7 @@ export const Modal = ({ isOpen, setIsOpen, children }: ModalProps) => {
                         onClose={() => setIsOpen(false)}
                         className="fixed inset-0 z-10 flex items-center justify-center"
                         >
-                        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+                        <div className="fixed inset-0 bg-black/30" aria-hidden="true" onClick={() => setIsOpen(false)}/>
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}

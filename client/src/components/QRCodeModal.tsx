@@ -13,7 +13,7 @@ export default function QRCodeModal({ isOpen, qr, mail }: QRCodeModalProps) {
     const [, setLocation] = useLocation();
 
     function handleClosing() {
-        const confirmation = confirm("Jste si jistý, že chcete");
+        const confirmation = confirm("Jste si jistý, že chcete toto okno zavřít? Po zavření půjde QR kód znovu ukázat až po úspěšném přihlášení!");
         if (!confirmation) return;
 
         setLocation("/login");

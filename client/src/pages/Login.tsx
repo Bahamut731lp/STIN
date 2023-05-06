@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import CustomToaster, { Toast } from "../components/Toast";
 import TwoFactorModal from "../components/TwoFactorModal";
 import { useLocation } from "wouter";
+import Header from "../components/Header";
 
 export default function Login() {
 
@@ -68,8 +69,9 @@ export default function Login() {
     }
 
     return (
-        <main className="w-screen min-h-screen grid place-items-center bg-neutral-950">
-            <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
+        <main className="w-screen min-h-screen flex flex-col bg-neutral-950">
+            <Header></Header>
+            <div className="flex-1 grid place-items-center px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
                 <div className="justify-center mx-auto text-left align-bottom transition-all transform bg-neutral-800 rounded-lg sm:align-middle sm:max-w-2xl sm:w-full">
                     <div className="grid flex-wrap items-center justify-center grid-cols-1 mx-auto shadow-xl lg:grid-cols-2 rounded-xl">
                         <div className="w-full px-6 py-3">

@@ -1,19 +1,19 @@
 import { Listbox } from "@headlessui/react"
 import { useState, useEffect } from "react"
-
-import Account from "../interface/Account"
+import Account, { Identifier } from "../interface/Account"
 import { MiniChevron } from "./Icons";
 
 interface AccountSelectorProps {
     data: Account[]
+    onChange: (value: Identifier) => void
 }
 
-export default function AccountSelector({ data }: AccountSelectorProps) {
-    const [selectedPerson, setSelectedPerson] = useState(data[0]);
+export default function AccountSelector({ data, onChange }: AccountSelectorProps) {
+    const [selectedPerson, setSelectedPerson] = useState<Account>(data[0]);
 
     useEffect(() => {
-        console.log(selectedPerson);
-    }, [selectedPerson])
+        onChange(selectedPerson.identifier);
+    }, [selectedPerson, onChange])
 
 
     return (

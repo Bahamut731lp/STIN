@@ -1,61 +1,78 @@
-import { Dialog } from "@headlessui/react";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import Account from "../interface/Account";
-
+import Account, { Identifier } from "../interface/Account";
+import useNumber from "../lib/useNumber";
 import Modal, { ModalProps } from "./Modal";
 import CurrencyCombo from "./CurrencyCombo";
 import AccountSelector from "./AccountSelector";
-import { XMark } from "./Icons";
+import Button from "./Button";
+import Input from "./Input";
+import { mutate } from "swr";
 
 interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
 }
 
 export default function DepositModal(props: DepositModalProps) {
-    const [value, setValue] = useState(0)
-    const [currency, setCurrency] = useState(null);
-    
+    const [value, setValue] = useNumber(0)
+    const [currency, setCurrency] = useState("");
+    const [account, setAccount] = useState<Identifier>({prefix: "", base: "", bank: "0666"});
+
+    async function handleSubmission() {
+        const {email, token} = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
+
+        const options = {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                "Authorization": `Basic ${btoa(`${email}:${token}`)}`
+            },
+            body: JSON.stringify({
+                "prefix": account.prefix,
+                "amount": value,
+                "currency": currency
+            })
+        };
+
+        await fetch('http://localhost:8000/user/account/deposit', options);
+        mutate("http://localhost:8000/user")
+        props.setIsOpen(false);
+    }
+
     return (
         <Modal {...props}>
-            <div className="flex flex-col gap-4 h-full">
-                <div className="flex justify-between">
-                    <Dialog.Title className="text-amber-400 text-xl lg:text-3xl uppercase font-bold">
-                        Vklad na účet
-                    </Dialog.Title>
-
-                    <button onClick={() => props.setIsOpen(false)}>
-                        <XMark/>
-                    </button>
-                </div>
-
+            <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-neutral-700">
+                <h3 className="text-lg font-semibold text-white">
+                    Nový vklad
+                </h3>
+                <button type="button" className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:text-white" data-modal-toggle="defaultModal">
+                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <span className="sr-only">Close modal</span>
+                </button>
+            </div>
+            <div className="flex flex-col gap-4">
                 <div>
-                    <AccountSelector 
+                    <AccountSelector
+                        onChange={(value) => setAccount(value)}
                         data={props.accounts}
                     />
                 </div>
 
-
                 <div className="flex flex-col sm:flex-row gap-2 my-auto">
-                    <input 
-                        type="number"
-                        onChange={(e) => setValue(Number(e.target.value))}
+                    <Input
+                        type="text"
+                        onChange={(e) => setValue(e.target.value)}
                         value={value}
-                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight text-xl lg:text-4xl"
-                    />
+                    ></Input>
                     <div className="w-full sm:w-1/6">
-                        <CurrencyCombo/>
+                        <CurrencyCombo onChange={(value) => setCurrency(value)} />
                     </div>
                 </div>
 
-
                 <div className="flex gap-4 mt-auto">
-                    <button
-                        className="w-full inline-flex justify-center transition duration-75 px-4 py-2 border hover:bg-amber-400 hover:text-black border-amber-400 text-amber-400 text-base font-medium focus:outline-none sm:w-auto sm:text-sm"
-                        onClick={() => props.setIsOpen(false)}
-                    >
-                        Odeslat
-                    </button>
+                    <Button onClick={() => handleSubmission()}>
+                        Vytvořit
+                    </Button>
                 </div>
             </div>
         </Modal>

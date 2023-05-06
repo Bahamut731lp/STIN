@@ -32,7 +32,7 @@ async function fetcher(url: string) {
 function Dashboard() {
     const [accountCreation, setAccountCreation] = useState(false);
 
-    const { data, isLoading } = useSWR('http://localhost:8000/user', fetcher)
+    const { data, error, isLoading } = useSWR('http://localhost:8000/user', fetcher)
     const [_accounts, _setAccounts] = useContext(AccountsContext);
     const [, setLocation] = useLocation();
 
@@ -42,7 +42,8 @@ function Dashboard() {
         if (!isLoading) {
             _setAccounts(data.accounts)
         }
-    }, [data, isLoading, _setAccounts]);
+
+    }, [data, isLoading, error, setLocation, _setAccounts]);
 
     function handleLogout() {
         //asdasd

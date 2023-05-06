@@ -16,6 +16,16 @@ export default interface DatabaseSchema {
             prefix: string,
             base: string,
             bank: string
-        }
+        },
+        history: {
+            type: "deposit" | "withdraw" | "payment";
+            amount: number;
+            target: string;
+            conversion?: {
+                from: string;
+                to: string;
+                rate: number;
+            }
+        }[]
     }[]
 }

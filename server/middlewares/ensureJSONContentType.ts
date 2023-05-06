@@ -1,9 +1,16 @@
 import { Middleware } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 
 const ensureJSON: Middleware = async (ctx, next) => {
+
+    //Nemá smysl kontrolovat
+    if (ctx.request.method != "POST") {
+        await next();
+        return;
+    }
+
     const contentType = ctx.request.headers.get("content-type")
 
-    if (contentType != "application/json") {
+    if (!contentType && contentType != "application/json") {
         ctx.response.status = 415
         ctx.response.type = "application/json"
         ctx.response.body = {

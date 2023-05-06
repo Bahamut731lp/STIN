@@ -4,6 +4,7 @@ import getTwoFactorSecret from "../../lib/getTwoFactorSecret.ts";
 import getPasswordHash from "../../lib/hash.ts";
 import require from "../../lib/require.ts"
 
+
 export async function post(context: Context) {
     const body = await context.request.body().value
     const hasAllRequiredFields = require(body, "email", "name", "password")
@@ -38,7 +39,16 @@ export async function post(context: Context) {
                 uri: twoFactor.uri
             }
         },
-        accounts: [],
+        accounts: [{
+            amount: 0,
+            currency: "CZK",
+            history: [],
+            identifier: {
+                prefix: "000000",
+                base: crypto.randomUUID(),
+                bank: "0666"
+            }
+        }],
     })
 
     response.user.password = "";

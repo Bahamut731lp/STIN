@@ -1,10 +1,16 @@
 import { Combobox } from "@headlessui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Currencies from "../lib/Currencies.json"
+import { MiniChevronRight } from "./Icons";
 
 export type Currency = keyof typeof Currencies;
 
-export default function CurrencyCombo() {
+interface CurrencyComboProps {
+    onChange: (value: string) => void
+}
+
+export default function CurrencyCombo(props: CurrencyComboProps) {
+
     const currencies = Object.keys(Currencies) as Currency[];
     const [selected, setSelected] = useState(currencies[0])
     const [query, setQuery] = useState('')
@@ -19,12 +25,16 @@ export default function CurrencyCombo() {
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
 
+    useEffect(() => {
+        props.onChange(selected);
+    }, [props, selected]);
+
     return (
         <Combobox value={selected} onChange={setSelected}>
             <div className="relative">
                 <div className="relative w-full cursor-default overflow-hidden text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                     <Combobox.Input
-                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight text-xl lg:text-4xl"
+                        className="bg-transparent focus:border-amber-400 transition duration-75 text-white border-b-2 border-amber-400/25 w-full leading-none py-2 px-2 focus:outline-none font-mono font-extralight"
                         onChange={(event) => setQuery(event.target.value)}
                     />
                 </div>
@@ -46,17 +56,15 @@ export default function CurrencyCombo() {
                                 {({ selected, active }) => (
                                     <>
                                         <span
-                                            className={`block truncate ${selected ? 'font-medium' : 'font-normal'
-                                                }`}
+                                            className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
                                         >
                                             {currency}
                                         </span>
                                         {selected ? (
                                             <span
-                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-teal-600'
-                                                    }`}
+                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-black'}`}
                                             >
-                                                Y
+                                                <MiniChevronRight></MiniChevronRight>
                                             </span>
                                         ) : null}
                                     </>

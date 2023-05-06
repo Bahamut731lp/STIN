@@ -4,6 +4,7 @@ import AccountsContext, { AccountsProvider } from '../components/AccountsContext
 import { Leave } from "../components/Icons"
 import { useContext, useEffect } from "react"
 import { useLocation } from "wouter";
+import AccountCreationModal from "../components/AccountCreationModal";
 
 async function fetcher(url: string) {
     const session = localStorage.getItem("_ps_sess");
@@ -78,7 +79,7 @@ function Dashboard() {
                 </div>
             </main>
 
-           
+            <AccountCreationModal isOpen={true} accounts={_accounts} setIsOpen={() => {}}/>
         </div>
     )
 }

@@ -10,6 +10,7 @@ import { XMark } from "./Icons";
 
 interface PaymentModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
+    active: string
 }
 
 export default function PaymentModal(props: PaymentModalProps) {

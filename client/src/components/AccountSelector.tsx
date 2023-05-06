@@ -4,17 +4,18 @@ import Account, { Identifier } from "../interface/Account"
 import { MiniChevron } from "./Icons";
 
 interface AccountSelectorProps {
-    data: Account[]
-    onChange: (value: Identifier) => void
+    active: string;
+    data: Account[];
+    onChange: (value: Identifier) => void;
 }
 
-export default function AccountSelector({ data, onChange }: AccountSelectorProps) {
-    const [selectedPerson, setSelectedPerson] = useState<Account>(data[0]);
+export default function AccountSelector({ data, active, onChange }: AccountSelectorProps) {
+    const defaultIndex = Math.max(0, data.findIndex((v) => v.identifier.prefix == active));
+    const [selectedPerson, setSelectedPerson] = useState<Account>(data[defaultIndex]);
 
     useEffect(() => {
         onChange(selectedPerson.identifier);
     }, [selectedPerson, onChange])
-
 
     return (
         <Listbox value={selectedPerson} onChange={setSelectedPerson} as="div" className="relative">

@@ -11,6 +11,7 @@ import getCurrencyFormatter from "../lib/CurrencyFormatter";
 
 interface AccountHistoryModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
+    active: string
 }
 
 export default function AccountHistoryModal(props: AccountHistoryModalProps) {

@@ -11,12 +11,13 @@ import { mutate } from "swr";
 
 interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
+    active: string
 }
 
 export default function DepositModal(props: DepositModalProps) {
     const [value, setValue] = useNumber(0)
     const [currency, setCurrency] = useState("");
-    const [account, setAccount] = useState<Identifier>({prefix: "", base: "", bank: "0666"});
+    const [account, setAccount] = useState<Identifier>({bank: "0666", base: "", prefix: ""});
 
     async function handleSubmission() {
         const {email, token} = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
@@ -45,7 +46,12 @@ export default function DepositModal(props: DepositModalProps) {
                 <h3 className="text-lg font-semibold text-white">
                     Nový vklad
                 </h3>
-                <button type="button" className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:text-white" data-modal-toggle="defaultModal">
+                <button 
+                    type="button" 
+                    className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:text-white"
+                    data-modal-toggle="defaultModal"
+                    onClick={() => props.setIsOpen(false)}
+                >
                     <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                     <span className="sr-only">Close modal</span>
                 </button>
@@ -54,6 +60,7 @@ export default function DepositModal(props: DepositModalProps) {
                 <div>
                     <AccountSelector
                         onChange={(value) => setAccount(value)}
+                        active={props.active}
                         data={props.accounts}
                     />
                 </div>

@@ -10,11 +10,11 @@ name: Deno
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ["develop"]
     paths: ["server/**"]
     
   pull_request:
-    branches: ["main", "develop"]
+    branches: ["develop"]
     paths: ["server/**"]
 
 permissions:

@@ -42,7 +42,6 @@ jobs:
 
       - name: Create coverage report
         run: deno coverage cov_profile --lcov --output=cov_profile.lcov
-
             
       - name: Install lcov-summary
         run: |
@@ -66,10 +65,3 @@ jobs:
             minColorRange: 70
             color: orange
             style: "for-the-badge"
-    
-
-      # Uncomment this step to verify the use of 'deno fmt' on each commit.
-      # - name: Verify formatting
-      #   run: deno fmt --check
-
-

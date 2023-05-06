@@ -9,11 +9,13 @@ import auth_router from "./routers/auth.ts"
 import * as Root from "./controllers/root.ts"
 import * as Ping from "./controllers/ping.ts"
 import * as Database from "./controllers/database.ts"
+import * as User from "./controllers/database.ts";
 
 router
     .get("/", Root.get)
     .get("/ping", Ping.get)
     .get("/db", Database.get)
+    .get("/user", User.get)
     .use("/auth", auth_router.routes())
 
 const app = new Application();

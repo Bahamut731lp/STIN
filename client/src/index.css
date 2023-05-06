@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&family=Quantico:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .bg-logo {
+        @apply bg-gradient-to-bl from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent;
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}

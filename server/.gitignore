@@ -1,0 +1,5 @@
+.env
+cov_profile/
+.vscode
+db.json
+cov_profile.lcov

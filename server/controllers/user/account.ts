@@ -1,6 +1,5 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 import db from "../../database/initialize.ts";
-import DatabaseSchema from "../../database/schema.js";
 
 function getPrefixNumber() {
     return Math.floor(100000 + Math.random() * 900000);

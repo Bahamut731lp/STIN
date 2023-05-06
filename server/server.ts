@@ -1,7 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import ensureJSONContentType from "./middlewares/ensureJSONContentType.ts";
-
+import isLoggedIn from "./middlewares/isLoggedIn.ts";
 
 const router = new Router();
 
@@ -9,13 +9,13 @@ import auth_router from "./routers/auth.ts"
 import * as Root from "./controllers/root.ts"
 import * as Ping from "./controllers/ping.ts"
 import * as Database from "./controllers/database.ts"
-import * as User from "./controllers/database.ts";
+import * as User from "./controllers/user.ts";
 
 router
     .get("/", Root.get)
     .get("/ping", Ping.get)
     .get("/db", Database.get)
-    .get("/user", User.get)
+    .get("/user", isLoggedIn, User.get)
     .use("/auth", auth_router.routes())
 
 const app = new Application();

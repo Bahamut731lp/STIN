@@ -2,4 +2,5 @@
 cov_profile/
 .vscode
 db.json
+sessions.json
 cov_profile.lcov

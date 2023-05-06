@@ -11,6 +11,7 @@ interface Session {
 }
 
 const SESSIONS = new Database<Session>({
+    path: "./sessions.json",
     pretty: true,
     autoload: true,
     autosave: true,

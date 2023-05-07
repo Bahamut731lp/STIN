@@ -16,12 +16,20 @@ export async function get(context: Context) {
 
     const result = await db.findOne((document) => document.user.email == email);
 
-    //Sanitace, páč tohle tam fakt úplně nepotřebujem...
-    if (result != null) {
-        result.user.password = "";
-        result.user.secret = { uri: "" };
+    if (result == null) {
+        context.response.status = 404;
+        context.response.body = {
+            title: "No email found",
+            detail: `Email not found in database`,
+            data: null,
+        }
+
+        return;
     }
 
+    result.user.password = "";
+    result.user.secret = { uri: "" };
+    
     context.response.status = 200
     context.response.body = {
         data: result

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { mutate } from "swr";
 
 import Account, { Identifier } from "../interface/Account";
 import useNumber from "../lib/useNumber";
@@ -7,7 +8,6 @@ import CurrencyCombo from "./CurrencyCombo";
 import AccountSelector from "./AccountSelector";
 import Button from "./Button";
 import Input from "./Input";
-import { mutate } from "swr";
 
 interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
@@ -15,16 +15,16 @@ interface DepositModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
 }
 
 export default function DepositModal(props: DepositModalProps) {
-    const [value, setValue] = useNumber(0)
+    const [account, setAccount] = useState<Identifier>({ bank: "0666", base: "", prefix: "" });
     const [currency, setCurrency] = useState("");
-    const [account, setAccount] = useState<Identifier>({bank: "0666", base: "", prefix: ""});
+    const [value, setValue] = useNumber(0)
 
     async function handleSubmission() {
-        const {email, token} = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
+        const { email, token } = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
 
         const options = {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `Basic ${btoa(`${email}:${token}`)}`
             },
@@ -46,8 +46,8 @@ export default function DepositModal(props: DepositModalProps) {
                 <h3 className="text-lg font-semibold text-white">
                     Nový vklad
                 </h3>
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:text-white"
                     data-modal-toggle="defaultModal"
                     onClick={() => props.setIsOpen(false)}

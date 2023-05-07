@@ -20,6 +20,7 @@ export default interface DatabaseSchema {
         history: {
             type: "deposit" | "withdraw" | "payment";
             amount: number;
+            date: string;
             conversion?: {
                 from: string;
                 to: string;

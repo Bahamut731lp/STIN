@@ -2,7 +2,8 @@ export interface Transaction {
     type: "deposit" | "withdraw" | "payment";
     amount: number;
     target: string;
-    conversion?: {
+    date: string;
+    conversion: {
         from: string;
         to: string;
         rate: number;

@@ -24,16 +24,15 @@ export async function post(context: Context) {
         return;
     }
 
-    const account = user.accounts.find((acc) => acc.identifier.prefix == prefix);
-
+    const index = user.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
     await db.updateOne(
         (document) => document.user.email == email,
         (document) => {
-            const index = document.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
             document.accounts[index].amount -= amount;
             document.accounts[index].history.push({
-                type: "deposit",
+                type: "payment",
                 amount: amount,
+                date: new Date().toISOString(),
                 conversion: {
                     from: currency,
                     to: currency,

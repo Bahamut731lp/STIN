@@ -8,42 +8,7 @@ interface AccountsProviderProps {
 }
 
 export function AccountsProvider(props: AccountsProviderProps) {
-    const [accounts, setAccounts] = useState([] as Account[]);
-    const data = useMemo(() => ([
-        {
-            amount: 10999,
-            currency: "CZK",
-            identifier: {
-                prefix: "000001",
-                base: "1234567890",
-                bank: "0666"
-            }
-        },
-        {
-            amount: 666,
-            currency: "EUR",
-            identifier: {
-                prefix: "000002",
-                base: "1234567890",
-                bank: "0666"
-            }
-        },
-        {
-            amount: 720,
-            currency: "JPY",
-            identifier: {
-                prefix: "000003",
-                base: "1234567890",
-                bank: "0666"
-            }
-        }
-    ]), [])
-
-    
-    useEffect(() => {
-        setAccounts(data)
-    }, [data])
-    
+    const [accounts, setAccounts] = useState([] as Account[]);   
 
     return (
         <AccountsContext.Provider value={[accounts, setAccounts]}>

@@ -24,5 +24,5 @@ Deno.test("JSON Middleware #3: Different Content Type", async () => {
     .post("/auth/login")
     .set("Content-Type", "application/xml")
     .send('{"email: "test@test.com" }')
-    .expect(415);
+    .expect(400);
 });

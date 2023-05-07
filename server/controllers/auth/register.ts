@@ -38,7 +38,16 @@ export async function post(context: Context) {
                 uri: twoFactor.uri
             }
         },
-        accounts: [],
+        accounts: [{
+            amount: 0,
+            currency: "CZK",
+            history: [],
+            identifier: {
+                prefix: "000000",
+                base: crypto.randomUUID(),
+                bank: "0666"
+            }
+        }],
     })
 
     response.user.password = "";

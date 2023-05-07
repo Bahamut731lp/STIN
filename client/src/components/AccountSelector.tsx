@@ -1,20 +1,21 @@
 import { Listbox } from "@headlessui/react"
 import { useState, useEffect } from "react"
-
-import Account from "../interface/Account"
+import Account, { Identifier } from "../interface/Account"
 import { MiniChevron } from "./Icons";
 
 interface AccountSelectorProps {
-    data: Account[]
+    active: string;
+    data: Account[];
+    onChange: (value: Identifier) => void;
 }
 
-export default function AccountSelector({ data }: AccountSelectorProps) {
-    const [selectedPerson, setSelectedPerson] = useState(data[0]);
+export default function AccountSelector({ data, active, onChange }: AccountSelectorProps) {
+    const defaultIndex = Math.max(0, data.findIndex((v) => v.identifier.prefix == active));
+    const [selectedPerson, setSelectedPerson] = useState<Account>(data[defaultIndex]);
 
     useEffect(() => {
-        console.log(selectedPerson);
-    }, [selectedPerson])
-
+        onChange(selectedPerson.identifier);
+    }, [selectedPerson, onChange])
 
     return (
         <Listbox value={selectedPerson} onChange={setSelectedPerson} as="div" className="relative">

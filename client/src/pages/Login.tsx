@@ -42,7 +42,7 @@ export default function Login() {
         }
 
         tryExistingSession();
-    })
+    }, [])
 
 
     async function getResult() {

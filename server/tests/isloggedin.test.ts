@@ -33,11 +33,11 @@ Deno.test("Logged In Middleware #1: Successfully passes if headers are present",
             ["Authorization", `Basic ${btoa(`${email}:${token}`)}`],
             ["content-type", "application/json"]
         ]
-    }) as Context;
+    });
     const next = testing.createMockNext();
 
     // Act
-    await isLoggedIn(ctx, next);
+    await isLoggedIn(ctx as Context, next);
 
     // Cleanup
     await session.deleteMany((document) => document.email == email);
@@ -54,11 +54,11 @@ Deno.test("Logged In Middleware #2: No authentication header present", async () 
         headers: [
             ["content-type", "application/json"]
         ]
-    }) as Context;
+    });
     const next = testing.createMockNext();
 
     // Act
-    await isLoggedIn(ctx, next);
+    await isLoggedIn(ctx as Context, next);
 
     // Assert
     assertEquals(400, ctx.response.status);
@@ -74,12 +74,12 @@ Deno.test("Logged In Middleware #3: Header present, but no session found", async
             ["Authorization", `Basic ${btoa(`${email}:${token}`)}`],
             ["content-type", "application/json"]
         ]
-    }) as Context;
+    });
 
     const next = testing.createMockNext();
 
     // Act
-    await isLoggedIn(ctx, next);
+    await isLoggedIn(ctx as Context, next);
 
     // Assert
     assertEquals(401, ctx.response.status);

@@ -1,4 +1,4 @@
-import { testing } from "https://deno.land/x/oak/mod.ts";
+import { Context, testing } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { assertEquals, assertNotEquals } from "https://deno.land/std@0.186.0/testing/asserts.ts";
 import session from "../database/sessions.ts";
 import db from "../database/initialize.ts";
@@ -33,7 +33,7 @@ Deno.test("Logged In Middleware #1: Successfully passes if headers are present",
             ["Authorization", `Basic ${btoa(`${email}:${token}`)}`],
             ["content-type", "application/json"]
         ]
-    });
+    }) as Context;
     const next = testing.createMockNext();
 
     // Act
@@ -54,7 +54,7 @@ Deno.test("Logged In Middleware #2: No authentication header present", async () 
         headers: [
             ["content-type", "application/json"]
         ]
-    });
+    }) as Context;
     const next = testing.createMockNext();
 
     // Act
@@ -74,7 +74,7 @@ Deno.test("Logged In Middleware #3: Header present, but no session found", async
             ["Authorization", `Basic ${btoa(`${email}:${token}`)}`],
             ["content-type", "application/json"]
         ]
-    });
+    }) as Context;
 
     const next = testing.createMockNext();
 

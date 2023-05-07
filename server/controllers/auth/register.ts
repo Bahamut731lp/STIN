@@ -4,7 +4,6 @@ import getTwoFactorSecret from "../../lib/getTwoFactorSecret.ts";
 import getPasswordHash from "../../lib/hash.ts";
 import require from "../../lib/require.ts"
 
-
 export async function post(context: Context) {
     const body = await context.request.body().value
     const hasAllRequiredFields = require(body, "email", "name", "password")

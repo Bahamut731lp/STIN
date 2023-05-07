@@ -15,7 +15,7 @@ async function fetcher(url: string) {
     const { email, token } = JSON.parse(atob(session ?? ""))
     const options = {
         method: 'GET',
-        headers: {
+    headers: {
             'Content-Type': 'application/json',
             "Authorization": `Basic ${btoa(`${email}:${token}`)}`
         }

@@ -56,6 +56,17 @@ export async function post(context: Context) {
         return;
     }
 
+    if (account.data.amount < conversion.result) {
+        context.response.status = 403
+        context.response.body = {
+            title: "Not enough balance",
+            status: 403,
+            data: null
+        };
+        return;
+    }
+
+
     User.updateAccountWithPrefix(credentials.email, prefix, (document) => {
         document.amount -= conversion.result;
         document.history.push({

@@ -1,34 +1,9 @@
 import { assertEquals, assertObjectMatch } from "https://deno.land/std@0.129.0/testing/asserts.ts";
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
 
-import db from "../database/initialize.ts";
 import sessions from "../database/sessions.ts";
 import User from "../database/user.ts";
 import app from "../server.ts"
-
-async function createMockUser(email: string) {
-    await db.insertOne({
-        user: {
-            email,
-            name: email,
-            password: "",
-            secret: {
-                uri: ""
-            }
-        },
-        accounts: [{
-            amount: 0,
-            currency: "CZK",
-            history: [],
-            identifier: {
-                bank: "0666",
-                base: "",
-                prefix: "000000"
-            }
-        }]
-    })
-
-}
 
 async function createMockSession(email: string, token: string) {
     await sessions.insertOne({
@@ -112,7 +87,7 @@ Deno.test("Payment #5: Bad user account", async () => {
     const auth = `Basic ${btoa(`${email}:${token}`)}`
 
     await createMockSession(email, token);
-    await createMockUser(email);
+    const discardMockUser = await User.createMockUser(email);
 
     const request = await superoak(app);
     const result = await request
@@ -121,9 +96,9 @@ Deno.test("Payment #5: Bad user account", async () => {
         .set("Authorization", auth)
         .send({ currency: "CZK", amount: 100, prefix: email });
 
-    await db.deleteMany((document) => document.user.email == email);
+    await discardMockUser();
     await sessions.deleteMany((document) => document.expiration == undefined);
-    
+
     assertEquals(result.body.title, "Account does not exist");
     assertEquals(result.status, 400);
 });
@@ -134,7 +109,7 @@ Deno.test("Payment #6: Nonexistent Currency", async () => {
     const auth = `Basic ${btoa(`${email}:${token}`)}`
 
     await createMockSession(email, token);
-    await createMockUser(email);
+    const discardMockUser = await User.createMockUser(email);
 
     // Víme, že tam ten účet bude, páč jsme ho tam doslova teďko vložili
     // Proto ten vykřičník na konci.
@@ -147,7 +122,7 @@ Deno.test("Payment #6: Nonexistent Currency", async () => {
         .set("Authorization", auth)
         .send({ currency: email, amount: 100, prefix: mockAccount.data.identifier.prefix });
 
-    await db.deleteMany((document) => document.user.email == email);
+    await discardMockUser()
     await sessions.deleteMany((document) => document.expiration == undefined);
 
     assertEquals(result.body.title, "Conversion failed");
@@ -160,7 +135,7 @@ Deno.test("Payment #6: Successfull Transaction (No Conversion)", async () => {
     const auth = `Basic ${btoa(`${email}:${token}`)}`
 
     await createMockSession(email, token);
-    await createMockUser(email);
+    const discardMockUser = await User.createMockUser(email);
 
     // Víme, že tam ten účet bude, páč jsme ho tam doslova teďko vložili
     // Proto ten vykřičník na konci.
@@ -173,8 +148,33 @@ Deno.test("Payment #6: Successfull Transaction (No Conversion)", async () => {
         .set("Authorization", auth)
         .send({ currency: "CZK", amount: 100, prefix: mockAccount.data.identifier.prefix });
 
-    await db.deleteMany((document) => document.user.email == email);
+    await discardMockUser();
     await sessions.deleteMany((document) => document.expiration == undefined);
 
     assertEquals(result.status, 200);
 });
+
+Deno.test("Payment #7: Paying over the current balance", async () => {
+    const email = crypto.randomUUID();
+    const token = "111111"
+    const auth = `Basic ${btoa(`${email}:${token}`)}`
+
+    await createMockSession(email, token);
+    const discardMockUser = await User.createMockUser(email);
+
+    // Víme, že tam ten účet bude, páč jsme ho tam doslova teďko vložili
+    // Proto ten vykřičník na konci.
+    const mockAccount = (await User.getAccountWithPrefix(email, "000000"))!;
+
+    const request = await superoak(app);
+    const result = await request
+        .post("/user/account/pay")
+        .set("Content-Type", "application/json")
+        .set("Authorization", auth)
+        .send({ currency: "CZK", amount: 1000000000000000, prefix: mockAccount.data.identifier.prefix });
+
+    await discardMockUser();
+    await sessions.deleteMany((document) => document.expiration == undefined);
+
+    assertEquals(result.status, 403);
+})

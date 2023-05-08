@@ -26,7 +26,7 @@ export async function post(context: Context) {
     }
 
     const index = user.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
-    const conversion = await getConversion(user.accounts[index].currency, currency, amount);
+    const conversion = await getConversion(currency, user.accounts[index].currency, amount);
 
     await db.updateOne(
         (document) => document.user.email == email,

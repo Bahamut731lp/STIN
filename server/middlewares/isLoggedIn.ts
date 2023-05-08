@@ -1,5 +1,6 @@
 import { Middleware } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import SESSIONS from "../database/sessions.ts";
+import log from "../lib/logger.ts";
 
 const isLoggedIn: Middleware = async (ctx, next) => {
     const auth: string | null = ctx.request.headers.get("authorization");
@@ -22,12 +23,10 @@ const isLoggedIn: Middleware = async (ctx, next) => {
         const [email, token] = login.split(":");
 
         const result = await SESSIONS.findOne((document) => document.email == email && document.token == token);
+        
         if (!result) throw new Error();
-
-        await next();
-        return;
-
     } catch (_) {
+        log.warn(_);
         ctx.response.status = 401
         ctx.response.type = "application/json"
         ctx.response.body = {
@@ -38,6 +37,9 @@ const isLoggedIn: Middleware = async (ctx, next) => {
 
         return;
     }
+
+    await next();
+    return;
 };
 
 export default isLoggedIn;

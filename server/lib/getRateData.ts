@@ -38,5 +38,12 @@ export default async function getRateData() {
             }
         ))
 
+    result.push({
+        kurz: 1,
+        mnozstvi: 1,
+        timestamp: today,
+        kod: "CZK"
+    })
+
     return result;
 }

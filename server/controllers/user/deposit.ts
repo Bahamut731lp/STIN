@@ -1,5 +1,6 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 import db from "../../database/initialize.ts";
+import getConversion from "../../lib/getConversion.ts";
 
 export async function post(context: Context) {
     const body = await context.request.body().value;
@@ -25,18 +26,20 @@ export async function post(context: Context) {
     }
 
     const index = user.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
+    const conversion = await getConversion(user.accounts[index].currency, currency, amount);
+
     await db.updateOne(
         (document) => document.user.email == email,
         (document) => {
-            document.accounts[index].amount += amount;
+            document.accounts[index].amount += conversion.result;
             document.accounts[index].history.push({
                 type: "deposit",
                 amount: amount,
                 date: new Date().toISOString(),
                 conversion: {
-                    from: currency,
+                    from: user.accounts[index].currency,
                     to: currency,
-                    rate: 1
+                    rate: conversion.result / amount
                 }
             })
 

@@ -6,7 +6,7 @@ import app from "../server.ts"
 Deno.test("Register #1: No request body", async () => {
     const request = await superoak(app);
     await request
-        .post("/auth/login")
+        .post("/auth/register")
         .set("Content-Type", "application/json")
         .send({})
         .expect(400);
@@ -15,7 +15,7 @@ Deno.test("Register #1: No request body", async () => {
 Deno.test("Register #2: Only one parameter supplied", async () => {
     const request = await superoak(app);
     await request
-        .post("/auth/login")
+        .post("/auth/register")
         .set("Content-Type", "application/json")
         .send({ "email": "test@test.com" })
         .expect(400);

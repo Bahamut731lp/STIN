@@ -3,6 +3,7 @@ import Account from "../interface/Account";
 import Button from "./Button";
 import CurrencyCombo from "./CurrencyCombo";
 import Modal, { ModalProps } from "./Modal";
+import { mutate } from "swr";
 
 interface PaymentModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
     accounts: Account[]
@@ -13,19 +14,20 @@ export default function AccountCreationModal(props: PaymentModalProps) {
     const hasAccountWithCurrency = props.accounts.find((value) => value.currency == currency)
 
     async function createAccount() {
-        const {email, token} = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
+        const { email, token } = JSON.parse(atob(localStorage.getItem("_ps_sess") ?? ""))
 
         const options = {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `Basic ${btoa(`${email}:${token}`)}`
             },
-            body: JSON.stringify({currency})
+            body: JSON.stringify({ currency })
         };
 
         await fetch('http://localhost:8000/user/account/new', options)
         props.setIsOpen(false);
+        mutate("http://localhost:8000/user");
     }
 
     return (
@@ -39,13 +41,17 @@ export default function AccountCreationModal(props: PaymentModalProps) {
                     <span className="sr-only">Close modal</span>
                 </button>
             </div>
-            <div>
-                <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                    <div>
+            <div className="flex flex-col gap-4 items-start">
+                <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="flex flex-col">
                         <label htmlFor="brand" className="block mb-2 text-sm font-medium text-white">Měna</label>
-                        <CurrencyCombo onChange={(value) => setCurrency(value)} />
+                        <CurrencyCombo
+                            account={{ bank: "0666", base: "", prefix: "" }}
+                            onChange={(value) => setCurrency(value)}
+                        />
                     </div>
                 </div>
+
                 <>
                     {
                         hasAccountWithCurrency ? (
@@ -55,6 +61,7 @@ export default function AccountCreationModal(props: PaymentModalProps) {
                         ) : null
                     }
                 </>
+
                 <Button onClick={() => createAccount()}>
                     Vytvořit
                 </Button>

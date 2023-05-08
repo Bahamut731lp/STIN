@@ -60,16 +60,16 @@ export default function AccountHistoryModal(props: AccountHistoryModalProps) {
                                         {TransactionIcon[transaction.type]}
                                         {new Date(transaction.date).toLocaleString()}
                                     </span>
-                                    <span>
+                                    <span className="flex gap-1 items-center">
                                         {
                                             transaction.conversion.to != transaction.conversion.from ? (
                                                 <>
                                                     <span>
-                                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount * transaction.conversion.rate)}
+                                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)}
                                                     </span>
                                                     <MiniArrowRight />
                                                     <span>
-                                                        {getCurrencyFormatter(transaction.conversion?.to).format(transaction.amount)}
+                                                        {getCurrencyFormatter(transaction.conversion?.to).format(transaction.amount * transaction.conversion.rate)}
                                                     </span>
                                                 </>
                                             ) : (

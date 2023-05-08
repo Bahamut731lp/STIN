@@ -3,7 +3,7 @@ import Account, { Identifier } from "../interface/Account";
 import AccountSelector from "./AccountSelector";
 import { TransactionType } from "../interface/Transaction";
 import Modal, { ModalProps } from "./Modal";
-import { MiniBanknotes, MiniMinus, MiniPlus } from "./Icons";
+import { MiniArrowRight, MiniBanknotes, MiniMinus, MiniPlus } from "./Icons";
 import getCurrencyFormatter from "../lib/CurrencyFormatter";
 import Button from "./Button";
 
@@ -61,14 +61,27 @@ export default function AccountHistoryModal(props: AccountHistoryModalProps) {
                                         {new Date(transaction.date).toLocaleString()}
                                     </span>
                                     <span>
-                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)}
+                                        {
+                                            transaction.conversion.to != transaction.conversion.from ? (
+                                                <>
+                                                    <span>
+                                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount * transaction.conversion.rate)}
+                                                    </span>
+                                                    <MiniArrowRight />
+                                                    <span>
+                                                        {getCurrencyFormatter(transaction.conversion?.to).format(transaction.amount)}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)
+                                            )
+                                        }
                                     </span>
                                 </li>
                             ))
                         ) : (
                             <p>T</p>
                         )
-
                     }
                 </ul>
                 <Button onClick={() => props.setIsOpen(false)}>

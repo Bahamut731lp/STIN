@@ -37,8 +37,8 @@ export async function post(context: Context) {
                 amount: amount,
                 date: new Date().toISOString(),
                 conversion: {
-                    from: user.accounts[index].currency,
-                    to: currency,
+                    from: currency,
+                    to: user.accounts[index].currency,
                     rate: conversion.result / amount
                 }
             })

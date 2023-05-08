@@ -5,8 +5,8 @@ export default async function getConversion(from: string, to: string, amount: nu
     //TODO Test: Nenalezené měny a co s tim
     
     const dictionary = Object.fromEntries(relevantRates.map((rate) => [rate.kod, rate]));
-    const amountInCZK = dictionary["from"].kurz * amount;
-    const amountInTarget = Math.round(amountInCZK / dictionary["to"].kurz);
+    const amountInCZK = (dictionary["from"].kurz / dictionary["from"].mnozstvi) * amount;
+    const amountInTarget = Math.round(amountInCZK * dictionary["to"].mnozstvi / dictionary["to"].kurz);
     
     return {
         from,

@@ -43,9 +43,9 @@ export async function post(context: Context) {
     
     const query = await getUser(body.email)
     const totp = getTwoFactorObject(query.data!.user.secret.uri ?? "")
-    const isValid = totp.validate({token: body.token}) != null
+    const isValid = totp?.validate({token: body.token}) != null
 
-    if (!isValid) {
+    if (!totp && !isValid) {
         context.response.status = 401
         context.response.body = {
             title: "Not a valid token",

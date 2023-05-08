@@ -28,6 +28,15 @@ export async function post(context: Context) {
     const index = user.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
     const conversion = await getConversion(currency, user.accounts[index].currency, amount);
 
+    if (!conversion) {
+        context.response.status = 400
+        context.response.body = {
+            data: null
+        };
+
+        return;
+    }
+
     await db.updateOne(
         (document) => document.user.email == email,
         (document) => {

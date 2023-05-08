@@ -6,7 +6,7 @@ export async function post(context: Context) {
     const body = await context.request.body().value;
     const [email] = atob(context.request.headers.get("authorization")?.split(/\s+/gi)?.pop() ?? "")?.split(":") ?? [null, null];
 
-    const {currency, amount, prefix} = body;
+    const { currency, amount, prefix } = body;
 
     if (!currency || !amount || !prefix) {
         context.response.status = 400
@@ -27,6 +27,15 @@ export async function post(context: Context) {
 
     const index = user.accounts.findIndex((acc) => acc.identifier.prefix == prefix);
     const conversion = await getConversion(currency, user.accounts[index].currency, amount);
+
+    if (!conversion) {
+        context.response.status = 400
+        context.response.body = {
+            data: null
+        };
+
+        return;
+    }
 
     await db.updateOne(
         (document) => document.user.email == email,

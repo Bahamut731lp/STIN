@@ -1,12 +1,9 @@
-import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-
 import Account, { Identifier } from "../interface/Account";
 import AccountSelector from "./AccountSelector";
-import Transaction, { TransactionType } from "../interface/Transaction";
-
+import { TransactionType } from "../interface/Transaction";
 import Modal, { ModalProps } from "./Modal";
-import { MiniBanknotes, MiniMinus, MiniPlus } from "./Icons";
+import { MiniArrowRight, MiniBanknotes, MiniMinus, MiniPlus } from "./Icons";
 import getCurrencyFormatter from "../lib/CurrencyFormatter";
 import Button from "./Button";
 
@@ -19,7 +16,6 @@ export default function AccountHistoryModal(props: AccountHistoryModalProps) {
     const [account, setAccount] = useState<Identifier>({ bank: "0666", base: "", prefix: "" });
     const accountIndex = props.accounts.findIndex((acc) => acc.identifier.prefix == account.prefix)
 
-    console.log(props.accounts?.[accountIndex]?.history)
     const TransactionIcon: Record<TransactionType, React.ReactElement> = {
         "deposit": <MiniPlus />,
         "withdraw": <MiniMinus />,
@@ -64,15 +60,28 @@ export default function AccountHistoryModal(props: AccountHistoryModalProps) {
                                         {TransactionIcon[transaction.type]}
                                         {new Date(transaction.date).toLocaleString()}
                                     </span>
-                                    <span>
-                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)}
+                                    <span className="flex gap-1 items-center">
+                                        {
+                                            transaction.conversion.to != transaction.conversion.from ? (
+                                                <>
+                                                    <span>
+                                                        {getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)}
+                                                    </span>
+                                                    <MiniArrowRight />
+                                                    <span>
+                                                        {getCurrencyFormatter(transaction.conversion?.to).format(transaction.amount * transaction.conversion.rate)}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                getCurrencyFormatter(transaction.conversion?.from).format(transaction.amount)
+                                            )
+                                        }
                                     </span>
                                 </li>
                             ))
                         ) : (
                             <p>T</p>
                         )
-
                     }
                 </ul>
                 <Button onClick={() => props.setIsOpen(false)}>

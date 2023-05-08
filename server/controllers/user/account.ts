@@ -52,5 +52,10 @@ export async function post(context: Context) {
         }
     );
 
+    context.response.status = 200
+    context.response.body = {
+        data: "ok"
+    };
+
     return;
 }

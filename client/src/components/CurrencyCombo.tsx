@@ -1,33 +1,49 @@
 import { Combobox } from "@headlessui/react";
-import { useState, useEffect } from "react";
-import Currencies from "../lib/Currencies.json"
+import { useState, useEffect, useContext } from "react";
 import { MiniChevronRight } from "./Icons";
-
-export type Currency = keyof typeof Currencies;
+import useSWR from "swr";
+import AccountsContext from "./AccountsContext";
+import { Identifier } from "../interface/Account";
 
 interface CurrencyComboProps {
     onChange: (value: string) => void
+    account: Identifier
+}
+
+async function fetcher(url: string) {
+    const response = await fetch(url);
+    const json = await response.json();
+    return json.data as string[];
 }
 
 export default function CurrencyCombo(props: CurrencyComboProps) {
-
-    const currencies = Object.keys(Currencies) as Currency[];
-    const [selected, setSelected] = useState(currencies[0])
+    const [_accounts] = useContext(AccountsContext);
+    const index = Math.max(0, _accounts.findIndex((v) => v.identifier.prefix == props.account.prefix));
+    const { data } = useSWR('http://localhost:8000/currencies', fetcher)
+    const [selected, setSelected] = useState(data?.[index] ?? "CZK")
     const [query, setQuery] = useState('')
+
+    //Při změně měny se změna ohlásí vejš
+    useEffect(() => {
+        props.onChange(selected);
+    }, [props, selected]);
+
+    //Nastavení defaultní měny v moment, co jí máme (podle účtu)
+    useEffect(() => {
+        setSelected(_accounts[index].currency)
+    }, [index, _accounts]);
+
+    if (!data?.length) return null;
 
     const filteredCurrencies =
         query === ''
-            ? currencies
-            : currencies.filter((currency) =>
+            ? data
+            : data.filter((currency) =>
                 currency
                     .toLowerCase()
                     .replace(/\s+/g, '')
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
-
-    useEffect(() => {
-        props.onChange(selected);
-    }, [props, selected]);
 
     return (
         <Combobox value={selected} onChange={setSelected}>
@@ -44,7 +60,7 @@ export default function CurrencyCombo(props: CurrencyComboProps) {
                             Nothing found.
                         </div>
                     ) : (
-                        filteredCurrencies.map((currency) => (
+                        filteredCurrencies?.length ? filteredCurrencies.map((currency) => (
                             <Combobox.Option
                                 key={currency}
                                 className={({ active }) =>
@@ -70,7 +86,7 @@ export default function CurrencyCombo(props: CurrencyComboProps) {
                                     </>
                                 )}
                             </Combobox.Option>
-                        ))
+                        )) : null
                     )}
                 </Combobox.Options>
             </div>

@@ -4,6 +4,10 @@ import DatabaseSchema from "./schema.ts";
 type Account = (DatabaseSchema["accounts"]) extends readonly (infer ElementType)[] ? ElementType : never;
 
 class User {
+    static async get(email: string) {
+        return await db.findOne((document) => document.user.email == email)
+    }
+
     static async getAccountWithPrefix(email: string, prefix: string) {
         const user = await db.findOne((document) => document.user.email == email);
         if (!user) return null;
@@ -42,7 +46,7 @@ class User {
                 }
             },
             accounts: [{
-                amount: 0,
+                amount: 1000,
                 currency: "CZK",
                 history: [],
                 identifier: {

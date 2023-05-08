@@ -1,5 +1,4 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import db from "../../database/initialize.ts";
 import User from "../../database/user.ts";
 import Headers from "../../database/headers.ts";
 import getConversion from "../../lib/getConversion.ts";
@@ -23,7 +22,7 @@ export async function post(context: Context) {
         return;
     }
 
-    const user = await db.findOne((document) => document.user.email == credentials.email);
+    const user = await User.get(credentials.email)
     if (!user) {
         context.response.status = 500
         context.response.body = {

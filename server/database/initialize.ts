@@ -2,7 +2,7 @@ import { Database } from "https://deno.land/x/aloedb@0.9.0/mod.ts"
 import DatabaseSchema from './schema.ts'
 
 const DB_PATH = "./db.json"
-const DATABASE = new Database<DatabaseSchema>({
+const db = new Database<DatabaseSchema>({
     path: DB_PATH,
     pretty: true,
     autoload: true,
@@ -11,4 +11,4 @@ const DATABASE = new Database<DatabaseSchema>({
     immutable: true,
 });
 
-export default DATABASE;
+export default db;

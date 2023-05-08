@@ -1,0 +1,188 @@
+[
+	{
+		"kurz": 14.283,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "AUD"
+	},
+	{
+		"kurz": 4.252,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "BRL"
+	},
+	{
+		"kurz": 11.964,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "BGN"
+	},
+	{
+		"kurz": 3.075,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "CNY"
+	},
+	{
+		"kurz": 3.141,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "DKK"
+	},
+	{
+		"kurz": 23.4,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "EUR"
+	},
+	{
+		"kurz": 38.47,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "PHP"
+	},
+	{
+		"kurz": 2.708,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "HKD"
+	},
+	{
+		"kurz": 26.006,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "INR"
+	},
+	{
+		"kurz": 1.448,
+		"mnozstvi": 1000,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "IDR"
+	},
+	{
+		"kurz": 15.59,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "ISK"
+	},
+	{
+		"kurz": 5.827,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "ILS"
+	},
+	{
+		"kurz": 15.833,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "JPY"
+	},
+	{
+		"kurz": 1.157,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "ZAR"
+	},
+	{
+		"kurz": 15.748,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "CAD"
+	},
+	{
+		"kurz": 1.612,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "KRW"
+	},
+	{
+		"kurz": 6.283,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "HUF"
+	},
+	{
+		"kurz": 4.789,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "MYR"
+	},
+	{
+		"kurz": 1.187,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "MXN"
+	},
+	{
+		"kurz": 28.731,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "XDR"
+	},
+	{
+		"kurz": 2.001,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "NOK"
+	},
+	{
+		"kurz": 13.38,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "NZD"
+	},
+	{
+		"kurz": 5.112,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "PLN"
+	},
+	{
+		"kurz": 4.749,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "RON"
+	},
+	{
+		"kurz": 16.029,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "SGD"
+	},
+	{
+		"kurz": 2.083,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "SEK"
+	},
+	{
+		"kurz": 23.81,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "CHF"
+	},
+	{
+		"kurz": 62.956,
+		"mnozstvi": 100,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "THB"
+	},
+	{
+		"kurz": 1.09,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "TRY"
+	},
+	{
+		"kurz": 21.248,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "USD"
+	},
+	{
+		"kurz": 26.779,
+		"mnozstvi": 1,
+		"timestamp": "2023-05-07T22:00:00.000Z",
+		"kod": "GBP"
+	}
+]

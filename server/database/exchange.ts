@@ -4,18 +4,21 @@ import { Database } from "https://deno.land/x/aloedb@0.9.0/mod.ts"
     In-memory databáze pro právě aktivní sessions po přihlášení.
 */
 
-interface Session {
-    email: string;
-    token?: string;
-    expiration?: string;
+interface ExchangeRate {
+    timestamp: string;
+    kod: string;
+    mnozstvi: number;
+    kurz: number;
+    
 }
 
-const sessions = new Database<Session>({
-    path: "./sessions.json",
+const rates = new Database<ExchangeRate>({
+    path: "./rates.json",
     pretty: true,
     autoload: true,
     autosave: true,
     optimize: false,
     immutable: true,
 });
-export default sessions;
+
+export default rates;

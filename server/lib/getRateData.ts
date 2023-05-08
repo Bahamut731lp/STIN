@@ -8,10 +8,11 @@ const SEPARATOR = "|";
  */
 export default async function getRateData() {
     const today = new Date(new Date().setHours(0, 0, 0, 0)).toISOString();
+    const count = await rates.count();
     const isCurrentByTimestamp = (await rates.findMany(() => true)).every((rate) => rate.timestamp == today);
     const response = await fetch(KURZ_URL);
 
-    if (isCurrentByTimestamp || !response.ok) {
+    if (count != 0 && isCurrentByTimestamp || !response.ok) {
         return;
     }
 

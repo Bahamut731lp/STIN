@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { mutate } from "swr";
 
 import Account, { Identifier } from "../interface/Account";

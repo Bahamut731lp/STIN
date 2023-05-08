@@ -59,7 +59,7 @@ export default function Logout() {
                     <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-amber-400">Hotovo</h1>
                     <p className="mb-4 text-3xl tracking-tight font-bold text-white">{header}</p>
                     <p className="mb-4 text-lg font-light text-neutral-400">{ message }</p>
-                    <button type="button" className="mt-8 w-full border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black transition duration-75 py-2">Zpátky na domovskou stránku</button>
+                    <button onClick={() => setLocation("/")} type="button" className="mt-8 w-full border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black transition duration-75 py-2">Zpátky na domovskou stránku</button>
                 </div>
             </div>
         </main>

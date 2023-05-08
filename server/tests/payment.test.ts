@@ -101,8 +101,6 @@ Deno.test("Payment #4: No user in DB", async () => {
         .set("Authorization", auth)
         .send({ currency: "CZK", amount: 100, prefix: "00000" });
 
-    console.log(result);
-
     await sessions.deleteMany((document) => document.expiration == undefined);
     assertEquals(result.body.title, "No user found")
     assertEquals(result.status, 500);

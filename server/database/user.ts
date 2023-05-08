@@ -4,15 +4,6 @@ import DatabaseSchema from "./schema.ts";
 type Account = (DatabaseSchema["accounts"]) extends readonly (infer ElementType)[] ? ElementType : never;
 
 class User {
-    static async hasActiveAccounts(email: string) {
-        const user = await db.findOne((document) => document.user.email == email);
-
-        if (!user) return false;
-        if (!user.accounts.length) return false;
-
-        return true;
-    }
-
     static async getAccountWithPrefix(email: string, prefix: string) {
         const user = await db.findOne((document) => document.user.email == email);
         if (!user) return null;

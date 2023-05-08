@@ -1,10 +1,7 @@
-import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-
 import Account, { Identifier } from "../interface/Account";
 import AccountSelector from "./AccountSelector";
-import Transaction, { TransactionType } from "../interface/Transaction";
-
+import { TransactionType } from "../interface/Transaction";
 import Modal, { ModalProps } from "./Modal";
 import { MiniBanknotes, MiniMinus, MiniPlus } from "./Icons";
 import getCurrencyFormatter from "../lib/CurrencyFormatter";
@@ -19,7 +16,6 @@ export default function AccountHistoryModal(props: AccountHistoryModalProps) {
     const [account, setAccount] = useState<Identifier>({ bank: "0666", base: "", prefix: "" });
     const accountIndex = props.accounts.findIndex((acc) => acc.identifier.prefix == account.prefix)
 
-    console.log(props.accounts?.[accountIndex]?.history)
     const TransactionIcon: Record<TransactionType, React.ReactElement> = {
         "deposit": <MiniPlus />,
         "withdraw": <MiniMinus />,

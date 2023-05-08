@@ -6,6 +6,6 @@ export async function get(context: Context) {
 
     context.response.status = 200
     context.response.body = {
-        data: codes
+        data: ["CZK", ...codes]
     };
 }

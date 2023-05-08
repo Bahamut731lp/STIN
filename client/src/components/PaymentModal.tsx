@@ -73,7 +73,10 @@ export default function PaymentModal(props: PaymentModalProps) {
                             value={value}
                         ></Input>
                         <div className="w-full sm:w-1/6">
-                            <CurrencyCombo onChange={(value) => setCurrency(value)} />
+                            <CurrencyCombo
+                                account={account}
+                                onChange={(value) => setCurrency(value)}
+                            />
                         </div>
                     </div>
 

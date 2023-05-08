@@ -12,11 +12,8 @@ export default async function getRateData() {
     const response = await fetch(KURZ_URL);
 
     if (isCurrentByTimestamp || !response.ok) {
-        console.log("[", new Date().toLocaleString(), "]", "Updating rates from CNB");
         return;
     }
-    
-    console.log("[", new Date().toLocaleString(), "]", "Updating rates from CNB");
 
     const data = await response.text();
     const [_, header, ...rows] = data.trim().split("\n");
@@ -41,6 +38,5 @@ export default async function getRateData() {
             }
         ))
 
-    await rates.drop();
-    await rates.insertMany(result);
+    return result;
 }

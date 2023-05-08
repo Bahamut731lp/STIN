@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mutate } from "swr";
 
 import Account, { Identifier } from "../interface/Account";
@@ -72,7 +72,10 @@ export default function DepositModal(props: DepositModalProps) {
                         value={value}
                     ></Input>
                     <div className="w-full sm:w-1/6">
-                        <CurrencyCombo onChange={(value) => setCurrency(value)} />
+                        <CurrencyCombo
+                            account={account}
+                            onChange={(value) => setCurrency(value)}
+                        />
                     </div>
                 </div>
 

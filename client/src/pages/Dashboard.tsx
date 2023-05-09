@@ -70,7 +70,7 @@ function Dashboard() {
                     </button>
                 </span>
             </nav>
-            <main className="bg-neutral-950 flex-1 p-8">
+            <main className="bg-neutral-950 flex-1 p-2 sm:p-4 md:p-8">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
                     {

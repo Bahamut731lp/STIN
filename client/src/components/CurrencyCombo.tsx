@@ -15,7 +15,7 @@ async function fetcher(url: string) {
     API_URL.port = import.meta.env.VITE_API_PORT;
     API_URL.pathname = url;
 
-    const response = await fetch(url);
+    const response = await fetch(API_URL.toString());
     const json = await response.json();
     return json.data as string[];
 }

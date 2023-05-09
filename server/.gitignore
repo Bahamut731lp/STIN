@@ -4,3 +4,4 @@ cov_profile/
 db.json
 sessions.json
 cov_profile.lcov
+rates.json

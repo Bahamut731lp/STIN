@@ -5,7 +5,7 @@ export default function Logout() {
     const [header, setHeader] = useState("");
     const [message, setMessage] = useState("");
     
-    const [, setLocation] = useLocation();
+    const [,setLocation] = useLocation();
 
     useEffect(() => {
         /**
@@ -34,17 +34,26 @@ export default function Logout() {
 
             const options = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, token })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "Authorization": `Basic ${btoa(`${email}:${token}`)}`
+                },
+                body: JSON.stringify({})
             };
 
-            const response = await fetch('http://localhost:8000/auth/logout', options);
+            const API_URL = new URL(window.location.href);
+            API_URL.port = import.meta.env.VITE_API_PORT;
+            API_URL.pathname = "/auth/logout";
+
+            const response = await fetch(API_URL.toString(), options);
             if (response.status == 200) {
                 localStorage.removeItem("_ps_sess")
             }
 
             setTimeout(() => {
-                setLocation("/");
+                if (window.location.pathname.includes("/logout")) {
+                    setLocation("/");
+                }
             }, 5 * 1000);
         }
 
@@ -59,7 +68,7 @@ export default function Logout() {
                     <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-amber-400">Hotovo</h1>
                     <p className="mb-4 text-3xl tracking-tight font-bold text-white">{header}</p>
                     <p className="mb-4 text-lg font-light text-neutral-400">{ message }</p>
-                    <button type="button" className="mt-8 w-full border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black transition duration-75 py-2">Zpátky na domovskou stránku</button>
+                    <button onClick={() => setLocation("/")} type="button" className="mt-8 w-full border border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black transition duration-75 py-2">Zpátky na domovskou stránku</button>
                 </div>
             </div>
         </main>

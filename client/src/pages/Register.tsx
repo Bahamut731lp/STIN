@@ -25,7 +25,11 @@ export default function Register() {
             body: JSON.stringify({ name, email, password })
         };
 
-        const response = await fetch('http://localhost:8000/auth/register', options)
+        const API_URL = new URL(window.location.href);
+        API_URL.port = import.meta.env.VITE_API_PORT;
+        API_URL.pathname = "/auth/register";
+
+        const response = await fetch(API_URL.toString(), options)
         const json = await response.json();
 
         if (!String(response.status).startsWith("2")) return;

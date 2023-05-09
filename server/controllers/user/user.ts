@@ -1,5 +1,6 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 import db from "../../database/initialize.ts";
+import Session from "../../database/session.ts";
 
 export async function get(context: Context) {
     const requestURL = context.request.url
@@ -12,11 +13,24 @@ export async function get(context: Context) {
             detail: `Email must be provided as query parameter`,
             data: null,
         }
+
+        return;
+    }
+
+    const session = await Session.get(email);
+    if (!session) {
+        context.response.status = 403;
+        context.response.body = {
+            title: "No session found",
+            detail: ``,
+            data: null,
+        }
+
+        return;
     }
 
     const result = await db.findOne((document) => document.user.email == email);
-
-    if (result == null) {
+    if (!result) {
         context.response.status = 404;
         context.response.body = {
             title: "No email found",

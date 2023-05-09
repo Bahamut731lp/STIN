@@ -45,10 +45,10 @@ export async function post(context: Context) {
         return;
     }
 
-    const totp = getTwoFactorObject(user.user.secret.uri ?? "")
+    const totp = getTwoFactorObject(user.user.secret.uri);
     const isValid = totp?.validate({token: body.token}) != null
 
-    if (!totp && !isValid) {
+    if (!totp || !isValid) {
         context.response.status = 401
         context.response.body = {
             title: "Not a valid token",

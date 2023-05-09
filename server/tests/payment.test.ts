@@ -129,7 +129,7 @@ Deno.test("Payment #6: Nonexistent Currency", async () => {
     assertEquals(result.status, 400);
 });
 
-Deno.test("Payment #6: Successfull Transaction (No Conversion)", async () => {
+Deno.test("Payment #7: Successfull Transaction (No Conversion)", async () => {
     const email = crypto.randomUUID();
     const token = "111111"
     const auth = `Basic ${btoa(`${email}:${token}`)}`
@@ -154,7 +154,7 @@ Deno.test("Payment #6: Successfull Transaction (No Conversion)", async () => {
     assertEquals(result.status, 200);
 });
 
-Deno.test("Payment #7: Paying over the current balance", async () => {
+Deno.test("Payment #8: Paying over the current balance", async () => {
     const email = crypto.randomUUID();
     const token = "111111"
     const auth = `Basic ${btoa(`${email}:${token}`)}`

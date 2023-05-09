@@ -1,10 +1,10 @@
-import rates from "../database/exchange.ts";
+import Currency from "../database/currency.ts";
 
 export default async function getConversion(from: string, to: string, amount: number) {
     if (!from || !to || !amount) return null;
     
-    const fromRate = await rates.findOne((document) => document.kod == from);
-    const toRate = await rates.findOne((document) => document.kod == to);
+    const fromRate = await Currency.get(from);
+    const toRate = await Currency.get(to);
 
     if (!fromRate || !toRate) return null;
 

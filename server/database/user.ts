@@ -76,7 +76,7 @@ class User {
                 name: email,
                 password: password ? await getPasswordHash(password) : "",
                 secret: {
-                    uri: ""
+                    uri: "otpauth://totp/TEST?secret=ORSXG5A=&issuer=TEST"
                 }
             },
             accounts: [{

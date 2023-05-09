@@ -1,6 +1,6 @@
-import { assertEquals, assertNotEquals } from "https://deno.land/std@0.186.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.186.0/testing/asserts.ts";
 import getConversion from "../lib/getConversion.ts";
-import rates from "../database/exchange.ts";
+import Currency from "../database/currency.ts";
 
 Deno.test("getConversion #1: Empty arguments", async () => {
     const result = await getConversion("", "", NaN);
@@ -15,16 +15,9 @@ Deno.test("getConversion #2: Non-existing currencies", async () => {
     assertEquals(result, null);
 });
 
-Deno.test("getConversion #3: Successfully convert", async (test) => {
-    await test.step("Check if database has any usable rates", async () => {
-        const count = await rates.count();
-        assertNotEquals(count, 0);
-    });
-
-    await test.step("Check if database has any usable rates", async () => {
-        const rate = await rates.findOne(() => true);
-        const amount = 1500;
-        const conversion = await getConversion(rate!.kod, rate!.kod, amount);
-        assertEquals(conversion!.result, amount);
-    });
+Deno.test("getConversion #3: Successfully convert", async () => {
+    const rate = await Currency.get("CZK");
+    const amount = 1500;
+    const conversion = await getConversion(rate!.kod, rate!.kod, amount);
+    assertEquals(conversion!.result, amount);
 });

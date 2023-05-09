@@ -69,3 +69,24 @@ Deno.test("2FA #4: Invalid token submitted", async () => {
     await discardSession();
     assertEquals(result.status, 401);
 });
+
+Deno.test("2FA #5: Valid token submitted", async () => {
+    const email = crypto.randomUUID();
+    
+    const discardUser = await User.createMockUser(email);
+    const discardSession = await Session.createMockSession(email, undefined);
+    
+    const user = await User.get(email);
+    const totp = getTwoFactorObject(user!.user.secret.uri);
+    const token = totp?.generate();
+
+    const request = await superoak(app);
+    const result = await request
+        .post("/auth/twofactor")
+        .set("Content-Type", "application/json")
+        .send({ email, token })
+    
+    await discardUser();
+    await discardSession();
+    assertEquals(result.status, 200);
+});

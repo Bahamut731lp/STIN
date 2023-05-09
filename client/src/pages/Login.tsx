@@ -12,7 +12,7 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const [, setLocation] = useLocation();
+    const [,setLocation] = useLocation();
 
     useEffect(() => {
         /**
@@ -37,7 +37,11 @@ export default function Login() {
                 body: JSON.stringify({ email, token })
             };
 
-            const response = await fetch('http://localhost:8000/auth/validate', options);
+            const API_URL = new URL(window.location.href);
+            API_URL.port = import.meta.env.VITE_API_PORT;
+            API_URL.pathname = "/auth/validate";
+
+            const response = await fetch(API_URL.toString(), options);
             if (response.status == 200) setLocation("/dashboard");
         }
 
@@ -52,7 +56,11 @@ export default function Login() {
             body: JSON.stringify({ email, password })
         };
 
-        const response =  await fetch('http://127.0.0.1:8000/auth/login', options)
+        const API_URL = new URL(window.location.href);
+        API_URL.port = import.meta.env.VITE_API_PORT;
+        API_URL.pathname = "/auth/login";
+
+        const response =  await fetch(API_URL.toString(), options)
         const json = await response.json();
 
         return json;

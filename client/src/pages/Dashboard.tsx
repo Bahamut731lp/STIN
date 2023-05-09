@@ -21,10 +21,12 @@ async function fetcher(url: string) {
         }
     };
 
-    const address = new URL(url);
-    address.searchParams.append("email", email);
+    const API_URL = new URL(window.location.href);
+    API_URL.port = import.meta.env.VITE_API_PORT;
+    API_URL.pathname = url;
+    API_URL.searchParams.append("email", email);
 
-    const response = await fetch(address.href, options);
+    const response = await fetch(API_URL.toString(), options);
     const json = await response.json();
     return json.data;
 }
@@ -32,10 +34,9 @@ async function fetcher(url: string) {
 function Dashboard() {
     const [accountCreation, setAccountCreation] = useState(false);
 
-    const { data, error, isLoading } = useSWR('http://localhost:8000/user', fetcher)
+    const { data, error, isLoading } = useSWR('/user', fetcher)
     const [_accounts, _setAccounts] = useContext(AccountsContext);
     const [, setLocation] = useLocation();
-
 
     //Tady řešíme co s odpovědí od serveru
     useEffect(() => {
@@ -46,8 +47,7 @@ function Dashboard() {
     }, [data, isLoading, error, setLocation, _setAccounts]);
 
     function handleLogout() {
-        //asdasd
-        setLocation("/logout")
+        setLocation("/logout", { replace: true })
     }
 
     return (
@@ -70,7 +70,7 @@ function Dashboard() {
                     </button>
                 </span>
             </nav>
-            <main className="bg-neutral-950 flex-1 p-8">
+            <main className="bg-neutral-950 flex-1 p-2 sm:p-4 md:p-8">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
                     {

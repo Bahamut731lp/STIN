@@ -3,6 +3,8 @@ import db from "../database/initialize.ts";
 import session from "../database/sessions.ts";
 import app from "../server.ts"
 import getPasswordHash from "../lib/hash.ts";
+import Session from "../database/session.ts";
+import { assertEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
 
 Deno.test("User #1: No query params", async () => {
     const request = await superoak(app);
@@ -15,33 +17,16 @@ Deno.test("User #2: Try non-existing user", async () => {
     const email = crypto.randomUUID();
     const token = "111111";
     
-    await session.insertOne({
-        email,
-        token,
-        expiration: ""
-    });
-
-    await db.insertOne({
-        user: {
-            email,
-            name: "",
-            password: "",
-            secret: {
-                uri: ""
-            }
-        },
-        accounts: []
-    });
+    const discard = await Session.createMockSession(email, token);
 
     const request = await superoak(app);
-    await request
-        .get(`/user/`)
-        .set("Authorization", `Basic ${btoa(`${email}:${token}`)}`)
-        .expect(404)
+    const result = await request
+        .get(`/user/?email=${email}`)
+        .set("Authorization", `Basic ${btoa(`${email}:${token}`)}`);
 
-    await db.deleteMany((document) => document.user.email == email)
-    await session.deleteMany((document) => document.email == email)
+    await discard();
 
+    assertEquals(result.status, 404);
 });
 
 Deno.test("User #3: Try existing user", async () => {

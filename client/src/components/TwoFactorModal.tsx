@@ -28,7 +28,11 @@ export default function TwoFactorModal({ isOpen, setIsOpen, ...props }: TwoFacto
             body: JSON.stringify({ email: props.mail, token })
         };
 
-        const response = await fetch('http://localhost:8000/auth/twofactor', options);
+        const API_URL = new URL(window.location.href);
+        API_URL.port = import.meta.env.VITE_API_PORT;
+        API_URL.pathname = "/auth/twofactor";
+
+        const response = await fetch(API_URL.toString(), options);
         const json = await response.json();
         
         if (json.data.isValid) {

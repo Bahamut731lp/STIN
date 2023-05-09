@@ -35,8 +35,12 @@ export default function DepositModal(props: DepositModalProps) {
             })
         };
 
-        await fetch('http://localhost:8000/user/account/deposit', options);
-        mutate("http://localhost:8000/user")
+        const API_URL = new URL(window.location.href);
+        API_URL.port = import.meta.env.VITE_API_PORT;
+        API_URL.pathname = "/user/account/deposit";
+
+        await fetch(API_URL.toString(), options);
+        mutate("/user")
         props.setIsOpen(false);
     }
 

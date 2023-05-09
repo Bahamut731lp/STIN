@@ -30,8 +30,7 @@ export async function get(context: Context) {
     }
 
     const result = await db.findOne((document) => document.user.email == email);
-
-    if (result == null) {
+    if (!result) {
         context.response.status = 404;
         context.response.body = {
             title: "No email found",

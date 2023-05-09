@@ -25,14 +25,25 @@ class Session {
         return true;
     }
 
-    static async createMockSession(email: string, token: string) {
+    static async createMockSession(email: string, token: string, valid = true) {
         await db.insertOne({
             email,
             token,
-            expiration: undefined
+            expiration: valid ? new Date(new Date().setHours(new Date().getHours() + 4)).toLocaleString() : undefined
         });
 
         return () => db.deleteOne((document) => document.email == email);
+    }
+
+    static async delete(email: string) {
+        await db.deleteMany((document) => document.email == email);
+    }
+
+    static async isValid(email: string) {
+        const session = await Session.get(email);
+        if (!session || !session.expiration || !session.token) return false;
+
+        return new Date(session.expiration) > new Date();
     }
 }
 

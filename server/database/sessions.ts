@@ -4,13 +4,13 @@ import { Database } from "https://deno.land/x/aloedb@0.9.0/mod.ts"
     In-memory databáze pro právě aktivní sessions po přihlášení.
 */
 
-interface Session {
+export interface ISession {
     email: string;
     token?: string;
     expiration?: string;
 }
 
-const sessions = new Database<Session>({
+const sessions = new Database<ISession>({
     path: "./sessions.json",
     pretty: true,
     autoload: true,

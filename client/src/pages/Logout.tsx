@@ -38,7 +38,11 @@ export default function Logout() {
                 body: JSON.stringify({ email, token })
             };
 
-            const response = await fetch('http://localhost:8000/auth/logout', options);
+            const API_URL = new URL(window.location.href);
+            API_URL.port = import.meta.env.VITE_API_PORT;
+            API_URL.pathname = "/auth/logout";
+
+            const response = await fetch(API_URL.toString(), options);
             if (response.status == 200) {
                 localStorage.removeItem("_ps_sess")
             }

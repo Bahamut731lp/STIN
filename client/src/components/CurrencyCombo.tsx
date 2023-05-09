@@ -11,6 +11,10 @@ interface CurrencyComboProps {
 }
 
 async function fetcher(url: string) {
+    const API_URL = new URL(window.location.href);
+    API_URL.port = import.meta.env.VITE_API_PORT;
+    API_URL.pathname = url;
+
     const response = await fetch(url);
     const json = await response.json();
     return json.data as string[];
@@ -19,7 +23,7 @@ async function fetcher(url: string) {
 export default function CurrencyCombo(props: CurrencyComboProps) {
     const [_accounts] = useContext(AccountsContext);
     const index = Math.max(0, _accounts.findIndex((v) => v.identifier.prefix == props.account.prefix));
-    const { data } = useSWR('http://localhost:8000/currencies', fetcher)
+    const { data } = useSWR('/currencies', fetcher)
     const [selected, setSelected] = useState(data?.[index] ?? "CZK")
     const [query, setQuery] = useState('')
 

@@ -21,10 +21,12 @@ async function fetcher(url: string) {
         }
     };
 
-    const address = new URL(url);
-    address.searchParams.append("email", email);
+    const API_URL = new URL(window.location.href);
+    API_URL.port = import.meta.env.VITE_API_PORT;
+    API_URL.pathname = url;
+    API_URL.searchParams.append("email", email);
 
-    const response = await fetch(address.href, options);
+    const response = await fetch(API_URL.toString(), options);
     const json = await response.json();
     return json.data;
 }
@@ -32,7 +34,7 @@ async function fetcher(url: string) {
 function Dashboard() {
     const [accountCreation, setAccountCreation] = useState(false);
 
-    const { data, error, isLoading } = useSWR('http://localhost:8000/user', fetcher)
+    const { data, error, isLoading } = useSWR('/user', fetcher)
     const [_accounts, _setAccounts] = useContext(AccountsContext);
     const [, setLocation] = useLocation();
 

@@ -25,7 +25,11 @@ export default function AccountCreationModal(props: PaymentModalProps) {
             body: JSON.stringify({ currency })
         };
 
-        await fetch('http://localhost:8000/user/account/new', options)
+        const API_URL = new URL(window.location.href);
+        API_URL.port = import.meta.env.VITE_API_PORT;
+        API_URL.pathname = "/user/account/new";
+
+        await fetch(API_URL.toString(), options)
         props.setIsOpen(false);
         mutate("http://localhost:8000/user");
     }

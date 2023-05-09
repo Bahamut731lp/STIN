@@ -25,7 +25,7 @@ class Session {
         return true;
     }
 
-    static async createMockSession(email: string, token: string, valid = true) {
+    static async createMockSession(email: string, token: string, valid = false) {
         await db.insertOne({
             email,
             token,

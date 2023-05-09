@@ -1,9 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
 
-import db from "../database/initialize.ts";
 import Session from "../database/session.ts";
-import getPasswordHash from "../lib/hash.ts";
 import app from "../server.ts"
 
 Deno.test("Logout #1: No auth header", async () => {

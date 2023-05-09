@@ -1,7 +1,6 @@
 import { Middleware } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import Headers from "../database/headers.ts";
 import Session from "../database/session.ts";
-import log from "../lib/logger.ts";
 
 const isLoggedIn: Middleware = async (ctx, next) => {
     const auth = ctx.request.headers.get("authorization");

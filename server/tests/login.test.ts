@@ -1,10 +1,8 @@
 import { assertEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
 
-import db from "../database/initialize.ts";
 import Session from "../database/session.ts";
 import User from "../database/user.ts";
-import getPasswordHash from "../lib/hash.ts";
 import app from "../server.ts"
 
 Deno.test("Login #1: No parameters", async () => {

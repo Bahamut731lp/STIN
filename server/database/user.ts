@@ -31,7 +31,40 @@ class User {
                 document.accounts[account.index] = update(account.data);
                 return document;
             });
-        
+
+        return true;
+    }
+
+    static async getNewAccount(email: string, currency: string) {
+        const user = await db.findOne((document) => document.user.email == email);
+        if (!user) return false;
+
+        const getPrefixNumber = () => Math.floor(100000 + Math.random() * 900000);
+        let prefix: string;
+        do {
+            prefix = String(getPrefixNumber());
+        } while (user.accounts.find((v) => v.identifier.prefix == prefix) != undefined);
+
+        const base = user.accounts[0].identifier.base;
+
+        await db.updateOne(
+            (document) => document.user.email == email,
+            (document) => {
+                document.accounts.push({
+                    amount: 0,
+                    currency,
+                    history: [],
+                    identifier: {
+                        prefix,
+                        base,
+                        bank: "0666"
+                    }
+                });
+
+                return document;
+            }
+        );
+
         return true;
     }
 

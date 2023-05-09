@@ -1,16 +1,17 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import db from "../../database/initialize.ts";
+import Headers from "../../database/headers.ts";
+import User from "../../database/user.ts";
 
-function getPrefixNumber() {
-    return Math.floor(100000 + Math.random() * 900000);
+interface ExpectedBodyInterface {
+    currency: string;
 }
 
 export async function post(context: Context) {
     const body = await context.request.body().value;
-    const [email] = atob(context.request.headers.get("authorization")?.split(/\s+/gi)?.pop() ?? "")?.split(":") ?? [null, null];
-    
-    const currency = body.currency
-    if (!currency) {
+    const credentials = Headers.getAuthorization(context.request.headers.get("authorization"))
+    const { currency } = body as Partial<ExpectedBodyInterface>;
+
+    if (!credentials || !currency) {
         context.response.status = 400
         context.response.body = {
             data: null
@@ -18,39 +19,18 @@ export async function post(context: Context) {
         return;
     }
 
-    const user = await db.findOne((document) => document.user.email == email);
+    const user = await User.get(credentials.email);
     if (!user) {
         context.response.status = 500
         context.response.body = {
+            title: "No user found",
+            status: 500,
             data: null
         };
         return;
     }
 
-    let prefix: string;
-
-    do {
-        prefix = String(getPrefixNumber());
-    } while (user.accounts.find((v) => v.identifier.prefix == prefix) != undefined);
-
-    const base = user.accounts[0].identifier.base;
-    await db.updateOne(
-        (document) => document.user.email == email,
-        (document) => {
-            document.accounts.push({
-                amount: 0,
-                currency,
-                history: [],
-                identifier: {
-                    prefix,
-                    base,
-                    bank: "0666"
-                }
-            });
-
-            return document;
-        }
-    );
+    await User.getNewAccount(credentials.email, currency);
 
     context.response.status = 200
     context.response.body = {

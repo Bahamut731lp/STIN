@@ -23,3 +23,19 @@ Deno.test("User Utils #3: Updating non-existing account returns false", async ()
     await discard();
     assertEquals(result, false);
 })
+
+Deno.test("User Utils #4: Cannot create new account for non-existing user", async () => {
+    const email = crypto.randomUUID();
+    const result = await User.getNewAccount(email, "CZK");
+
+    assertEquals(result, false);
+});
+
+Deno.test("User Utils #5: Can create new account for exisitng user", async () => {
+    const email = crypto.randomUUID();
+    const discard = await User.createMockUser(email);
+    const result = await User.getNewAccount(email, "CZK");
+
+    await discard();
+    assertEquals(result, true);
+});

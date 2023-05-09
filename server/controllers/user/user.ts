@@ -13,6 +13,8 @@ export async function get(context: Context) {
             detail: `Email must be provided as query parameter`,
             data: null,
         }
+
+        return;
     }
 
     const session = await Session.get(email);
@@ -23,6 +25,8 @@ export async function get(context: Context) {
             detail: ``,
             data: null,
         }
+
+        return;
     }
 
     const result = await db.findOne((document) => document.user.email == email);

@@ -1,4 +1,5 @@
 import db from "../database/initialize.ts";
+import getPasswordHash from "../lib/hash.ts";
 import DatabaseSchema from "./schema.ts";
 
 type Account = (DatabaseSchema["accounts"]) extends readonly (infer ElementType)[] ? ElementType : never;
@@ -68,12 +69,12 @@ class User {
         return true;
     }
 
-    static async createMockUser(email: string) {
+    static async createMockUser(email: string, password = "") {
         await db.insertOne({
             user: {
                 email,
                 name: email,
-                password: "",
+                password: password ? await getPasswordHash(password) : "",
                 secret: {
                     uri: ""
                 }

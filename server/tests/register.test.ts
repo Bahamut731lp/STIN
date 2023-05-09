@@ -1,12 +1,12 @@
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
-import { assertNotEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
+import { assertNotEquals } from "https://deno.land/std@0.186.0/testing/asserts.ts";
 import db from "../database/initialize.ts";
 import app from "../server.ts"
 
 Deno.test("Register #1: No request body", async () => {
     const request = await superoak(app);
     await request
-        .post("/auth/login")
+        .post("/auth/register")
         .set("Content-Type", "application/json")
         .send({})
         .expect(400);
@@ -15,7 +15,7 @@ Deno.test("Register #1: No request body", async () => {
 Deno.test("Register #2: Only one parameter supplied", async () => {
     const request = await superoak(app);
     await request
-        .post("/auth/login")
+        .post("/auth/register")
         .set("Content-Type", "application/json")
         .send({ "email": "test@test.com" })
         .expect(400);

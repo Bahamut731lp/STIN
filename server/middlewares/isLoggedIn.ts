@@ -1,9 +1,9 @@
 import { Middleware } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-import SESSIONS from "../database/sessions.ts";
-import log from "../lib/logger.ts";
+import Headers from "../database/headers.ts";
+import Session from "../database/session.ts";
 
 const isLoggedIn: Middleware = async (ctx, next) => {
-    const auth: string | null = ctx.request.headers.get("authorization");
+    const auth = ctx.request.headers.get("authorization");
 
     if (!auth) {
         ctx.response.status = 400
@@ -17,16 +17,8 @@ const isLoggedIn: Middleware = async (ctx, next) => {
         return;
     }
 
-    try {
-        const data = auth.split(/\s+/gi).pop();
-        const login = atob(data as string);
-        const [email, token] = login.split(":");
-
-        const result = await SESSIONS.findOne((document) => document.email == email && document.token == token);
-        
-        if (!result) throw new Error();
-    } catch (_) {
-        log.warn(_);
+    const credentials = Headers.getAuthorization(auth)
+    if (!credentials) {
         ctx.response.status = 401
         ctx.response.type = "application/json"
         ctx.response.body = {
@@ -36,6 +28,18 @@ const isLoggedIn: Middleware = async (ctx, next) => {
         }
 
         return;
+    }
+
+    const session = await Session.get(credentials.email);
+    if (!session) {
+        ctx.response.status = 401
+        ctx.response.type = "application/json"
+        ctx.response.body = {
+            title: "No session found",
+            status: 401
+        }
+
+        return; 
     }
 
     await next();

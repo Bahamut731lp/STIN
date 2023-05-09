@@ -1,40 +1,37 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import getUser from "../../database/getUser.ts";
 import { getPasswordValidity } from "../../lib/hash.ts";
-import SESSIONS from "../../database/sessions.ts";
-import require from "../../lib/require.ts"
+import Session from "../../database/session.ts";
+import User from "../../database/user.ts";
+
+interface ExpectedBody {
+    email: string;
+    password: string;
+}
 
 export async function post(context: Context) {
     const body = await context.request.body().value
-    const hasAllRequiredFields = require(body, "email", "password")
+    const {email, password} = body as Partial<ExpectedBody>
     
-    if (hasAllRequiredFields.status == 400) {
-        context.response.status = hasAllRequiredFields.status
-        context.response.body = hasAllRequiredFields;
-        return;
-    }
-    
-    if ([body.email, body.password].every(v => typeof v != "string")) {
+    if (!email || !password) {
         context.response.status = 400
         context.response.body = {
-            title: `Malformed Request`,
-            detail: `Email or password is not string`,
-            status: 400,
             data: null
         };
         return;
     }
     
-    const query = await getUser(body.email)
-
-    if (query.data == null) {
-        context.response.status = query.status;
-        context.response.body = query;
+    const user = await User.get(body.email);
+    if (!user) {
+        context.response.status = 500
+        context.response.body = {
+            title: "No user found",
+            status: 500,
+            data: null
+        };
         return;
     }
 
-    const session = await SESSIONS.findOne((document) => document.email == body.email)
-
+    const session = await Session.get(body.email);
     if (session != null) {        
         if (session.token == undefined) {
             context.response.status = 200;
@@ -48,17 +45,17 @@ export async function post(context: Context) {
         }
         else {
             context.response.status = 200;
-            query.data.twofactor = true;
+            user.twofactor = true;
             context.response.body = {
                 status: 200,
-                data: query.data
+                data: user
             };
         }
         
         return;
     }
 
-    const isPasswordValid = await getPasswordValidity(body.password, query.data.user.password)
+    const isPasswordValid = await getPasswordValidity(body.password, user.user.password)
     if (!isPasswordValid) {
         context.response.status = 403
         context.response.body = {
@@ -70,16 +67,10 @@ export async function post(context: Context) {
         return;
     }
     
+    await Session.create(body.email)
+
     // NO YOINK
-    query.data.user.password = ""
-
-    await SESSIONS.insertOne({
-        email: body.email,
-        token: undefined
-    });
-
-    await SESSIONS.save()
-    
+    user.user.password = ""    
     context.response.status = 200
     context.response.body = {
         status: 200,

@@ -1,8 +1,8 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import rates from "../database/exchange.ts";
+import Currency from "../database/currency.ts";
 
 export async function get(context: Context) {
-    const codes = (await rates.findMany(() => true)).map(v => v.kod)
+    const codes = await Currency.getList();
 
     context.response.status = 200
     context.response.body = {

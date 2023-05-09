@@ -11,12 +11,12 @@ export default async function getRateData() {
     const count = await rates.count();
     const isCurrentByTimestamp = (await rates.findMany(() => true)).every((rate) => rate.timestamp == today);
     const response = await fetch(KURZ_URL);
+    const data = await response.text();
 
     if (count != 0 && isCurrentByTimestamp || !response.ok) {
         return;
     }
-
-    const data = await response.text();
+   
     const [_, header, ...rows] = data.trim().split("\n");
 
     const columns = header

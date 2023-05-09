@@ -1,12 +1,16 @@
-import rates from "../database/exchange.ts";
+import Currency from "../database/currency.ts";
 
 export default async function getConversion(from: string, to: string, amount: number) {
-    const fromRate = await rates.findOne((document) => document.kod == from);
-    const toRate = await rates.findOne((document) => document.kod == to);
+    if (!from || !to || !amount) return null;
+    
+    const fromRate = await Currency.get(from);
+    const toRate = await Currency.get(to);
+
+    if (!fromRate || !toRate) return null;
 
     const dictionary = Object.fromEntries([["from", fromRate], ["to", toRate]]);
-    const amountInCZK = (dictionary["from"]!.kurz / dictionary["from"]!.mnozstvi) * amount;
-    const amountInTarget = Math.round(amountInCZK * dictionary["to"]!.mnozstvi / dictionary["to"]!.kurz);
+    const amountInCZK = (dictionary["from"].kurz / dictionary["from"].mnozstvi) * amount;
+    const amountInTarget = Math.round(amountInCZK * dictionary["to"].mnozstvi / dictionary["to"].kurz);
     
     return {
         from,

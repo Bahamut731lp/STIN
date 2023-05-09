@@ -1,13 +1,27 @@
 import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
-import SESSIONS from "../../database/sessions.ts";
+import Session from "../../database/session.ts";
+
+interface ExpectedBodyInterface {
+    email: string;
+    token: string;
+}
 
 export async function post(context: Context) {
     const body = await context.request.body().value
+    const {email, token} = body as Partial<ExpectedBodyInterface>
+    
+    if (!email || !token) {
+        context.response.status = 400
+        context.response.body = {
+            title: "Missing parameters",
+            detail: "",
+            data: null
+        };
+        return;
+    }
 
-    //TODO: Check body
-
-    const session = await SESSIONS.findOne((document) => document.email == body.email)
-    if (session == null) {
+    const session = await Session.get(body.email);
+    if (!session) {
         context.response.status = 404
         context.response.body = {
             status: 404,
@@ -29,8 +43,9 @@ export async function post(context: Context) {
         return;
     }
 
-    if (new Date(String(session.expiration ?? "")) < new Date()) {
-        await SESSIONS.deleteOne((document) => document.email == body.email)
+    const isValidSession = await Session.isValid(email);
+    if (!isValidSession) {
+        await Session.delete(body.email);
 
         context.response.status = 401
         context.response.body = {

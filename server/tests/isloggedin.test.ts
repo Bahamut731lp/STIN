@@ -43,8 +43,8 @@ Deno.test("Logged In Middleware #1: Successfully passes if headers are present",
     await session.deleteMany((document) => document.email == email);
     await db.deleteMany((document) => document.user.email == email);
 
-    assertNotEquals(400, ctx.response.status);
-    assertNotEquals(401, ctx.response.status);
+    assertNotEquals(ctx.response.status, 400);
+    assertNotEquals(ctx.response.status, 401);
 });
 
 Deno.test("Logged In Middleware #2: No authentication header present", async () => {
@@ -61,7 +61,7 @@ Deno.test("Logged In Middleware #2: No authentication header present", async () 
     await isLoggedIn(ctx as Context, next);
 
     // Assert
-    assertEquals(400, ctx.response.status);
+    assertEquals(ctx.response.status, 400);
 });
 
 Deno.test("Logged In Middleware #3: Header present, but no session found", async () => {
@@ -82,5 +82,5 @@ Deno.test("Logged In Middleware #3: Header present, but no session found", async
     await isLoggedIn(ctx as Context, next);
 
     // Assert
-    assertEquals(401, ctx.response.status);
+    assertEquals(ctx.response.status, 401);
 });

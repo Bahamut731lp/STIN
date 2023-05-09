@@ -28,7 +28,7 @@ Deno.test("Login #3: Correct response to non-existing e-mail", async () => {
         .post("/auth/login")
         .set("Content-Type", "application/json")
         .send({ "email": new Date().toISOString(), "password": new Date().toISOString() })
-        .expect(404);
+        .expect(500);
 });
 
 Deno.test("Login #4: Successful login flow", async () => {

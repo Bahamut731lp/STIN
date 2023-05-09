@@ -65,7 +65,6 @@ export default function AccountCreationModal(props: PaymentModalProps) {
                         ) : null
                     }
                 </>
-
                 <Button onClick={() => createAccount()}>
                     Vytvořit
                 </Button>

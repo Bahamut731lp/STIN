@@ -49,6 +49,10 @@ export default function CurrencyCombo(props: CurrencyComboProps) {
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
 
+    useEffect(() => {
+        props.onChange(selected);
+    }, [props, selected]);
+
     return (
         <Combobox value={selected} onChange={setSelected}>
             <div className="relative h-full">

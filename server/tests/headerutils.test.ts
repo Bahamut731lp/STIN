@@ -1,4 +1,4 @@
-import { assertEquals, assertExists, assertNotEquals } from "https://deno.land/std@0.129.0/testing/asserts.ts";
+import { assertEquals, assertExists, assertNotEquals } from "https://deno.land/std@0.186.0/testing/asserts.ts";
 import Headers from "../database/headers.ts";
 
 Deno.test("getAuthorization #1: Returns null without provided argument", () => {

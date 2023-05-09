@@ -1,4 +1,4 @@
-import { assertEquals, assertObjectMatch } from "https://deno.land/std@0.129.0/testing/asserts.ts";
+import { assertEquals, assertObjectMatch } from "https://deno.land/std@0.186.0/testing/asserts.ts";
 import { superoak } from "https://deno.land/x/superoak@4.7.0/mod.ts";
 
 import sessions from "../database/sessions.ts";

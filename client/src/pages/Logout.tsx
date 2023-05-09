@@ -5,7 +5,7 @@ export default function Logout() {
     const [header, setHeader] = useState("");
     const [message, setMessage] = useState("");
     
-    const [, setLocation] = useLocation();
+    const [,setLocation] = useLocation();
 
     useEffect(() => {
         /**
@@ -34,8 +34,11 @@ export default function Logout() {
 
             const options = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, token })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    "Authorization": `Basic ${btoa(`${email}:${token}`)}`
+                },
+                body: JSON.stringify({})
             };
 
             const API_URL = new URL(window.location.href);
@@ -48,7 +51,9 @@ export default function Logout() {
             }
 
             setTimeout(() => {
-                setLocation("/");
+                if (window.location.pathname.includes("/logout")) {
+                    setLocation("/");
+                }
             }, 5 * 1000);
         }
 

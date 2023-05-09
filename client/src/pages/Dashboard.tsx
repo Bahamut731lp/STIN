@@ -38,7 +38,6 @@ function Dashboard() {
     const [_accounts, _setAccounts] = useContext(AccountsContext);
     const [, setLocation] = useLocation();
 
-
     //Tady řešíme co s odpovědí od serveru
     useEffect(() => {
         if (!isLoading) {
@@ -48,8 +47,7 @@ function Dashboard() {
     }, [data, isLoading, error, setLocation, _setAccounts]);
 
     function handleLogout() {
-        //asdasd
-        setLocation("/logout")
+        setLocation("/logout", { replace: true })
     }
 
     return (

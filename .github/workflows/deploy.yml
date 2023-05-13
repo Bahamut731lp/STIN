@@ -18,5 +18,6 @@ jobs:
         url: ${{ secrets.DEPLOY_IP }}
         # `method` is the request method to be used when making the request
         method: "POST"
+        content-type: application/json
         # `data` is the data to be sent as the request body
         data: ${{ secrets.DEPLOY_PASSWORD }}

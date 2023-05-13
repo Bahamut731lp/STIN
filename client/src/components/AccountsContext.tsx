@@ -1,4 +1,4 @@
-import { useState, createContext, useMemo, useEffect } from "react"
+import { useState, createContext } from "react"
 import Account from "../interface/Account";
 
 export const AccountsContext = createContext<[Account[], React.Dispatch<React.SetStateAction<Account[]>>]>([[], () => {}]);

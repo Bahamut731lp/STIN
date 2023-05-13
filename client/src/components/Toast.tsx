@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import toast, { ToastBar, Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 
-export function Toast(props) {
+export function Toast() {
     return (
         <motion.div
             id="toast-default"
@@ -29,9 +29,6 @@ export function Toast(props) {
         </motion.div>
     )
 }
-
-export const Success = () => toast.custom(<Toast></Toast>)
-
 
 export default function CustomToaster() {
     return (

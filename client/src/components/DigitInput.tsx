@@ -1,4 +1,4 @@
-import { useEffect, RefObject, createRef, useState } from "react";
+import { useEffect, createRef, useState } from "react";
 import Input from "./Input";
 
 interface DigitInputPros {
@@ -19,7 +19,7 @@ export default function DigitInput(props: DigitInputPros) {
         }
     }
 
-    function handleInput(event: React.ChangeEvent<HTMLInputElement>, index: number, refs: RefObject<HTMLInputElement>[]) {
+    function handleInput(event: React.ChangeEvent<HTMLInputElement>, index: number) {
         setValues((prev: string[]) => {
             if (prev[index] != "") {
                 prev[index] = event.target.value.slice(-1);
@@ -37,13 +37,13 @@ export default function DigitInput(props: DigitInputPros) {
 
     useEffect(() => {
         props.onChange(values.join(""))
-    }, [values]); 
+    }, [values, props]); 
 
     return (
         <>
             {
                 values.map((_, index) => (
-                    <Input ref={inputRefsArray[index]} key={index} value={values[index]} onChange={(event) => handleInput(event, index, inputRefsArray)} type="number" autoComplete="off" className="text-8xl text-center" />
+                    <Input ref={inputRefsArray[index]} key={index} value={values[index]} onChange={(event) => handleInput(event, index)} type="number" autoComplete="off" className="text-8xl text-center" />
                 ))
             }
         </>

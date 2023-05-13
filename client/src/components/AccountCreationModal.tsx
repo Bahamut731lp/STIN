@@ -31,7 +31,7 @@ export default function AccountCreationModal(props: PaymentModalProps) {
 
         await fetch(API_URL.toString(), options)
         props.setIsOpen(false);
-        mutate("http://localhost:8000/user");
+        mutate("/user");
     }
 
     return (

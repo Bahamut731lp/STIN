@@ -37,7 +37,7 @@ export default function PaymentModal(props: PaymentModalProps) {
 
         const API_URL = new URL(window.location.href);
         API_URL.port = import.meta.env.VITE_API_PORT;
-        API_URL.pathname = "/user/account/deposit";
+        API_URL.pathname = "/user/account/pay";
 
         await fetch(API_URL.toString(), options);
         mutate("/user")

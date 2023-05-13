@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import Image from "../assets/pavellopata.jpg"
 import Input from "../components/Input"
 import toast from 'react-hot-toast';
-import CustomToaster, { Toast } from "../components/Toast";
+import CustomToaster from "../components/Toast";
 import TwoFactorModal from "../components/TwoFactorModal";
 import { useLocation } from "wouter";
 import Header from "../components/Header";
@@ -67,7 +67,7 @@ export default function Login() {
     }
 
     async function submit() {
-        const t = toast.custom(<Toast>{}</Toast>);
+        const t = toast("Přihlašování...");
         const result = await getResult();
 
         if (String(result.status).startsWith("2")) toast.success("Byly zadány správné přihlašovací údaje", {id: t});

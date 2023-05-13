@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { useState, createContext } from "react"
 import Account from "../interface/Account";
 

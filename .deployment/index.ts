@@ -11,27 +11,33 @@ async function runBuild() {
 
 async function handle(ctx: Context) {
     if (!ctx.request.hasBody) {
+        console.log(new Date().toLocaleString(), "Request without body.");
         ctx.response.status = 400;
         return;
     }
 
     const body = await ctx.request.body().value;
     try {
-        const json = JSON.parse(JSON.stringify(body));
-        const { username, password } = json;
-
-        if (!username || !password) throw new Error();
+        const { username, password } = body;
+        if (!username || !password) {
+            console.log(new Date().toLocaleString(), "Bad credentials.");
+            throw new Error();
+        }
         if (password == env["PASSWORD"] && username == env["USERNAME"]) {
+            console.log(new Date().toLocaleString(), "Authenticated request, running build.");
             runBuild();
             ctx.response.status = 200;
             return;
         }
         else {
+            console.log(new Date().toLocaleString(), "Unauthenticated request.");
             ctx.response.status = 403;
             return;
         }
 
     } catch (_) {
+        console.log(_);
+        console.log(new Date().toLocaleString(), "Malformed request.");
         ctx.response.status = 400;
         return;
     }

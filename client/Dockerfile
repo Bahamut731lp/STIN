@@ -13,7 +13,7 @@ RUN npm run build
 
 EXPOSE 80
 
-CMD ["http-server", "/dist"]
+CMD ["http-server", "./dist", "-p", "80"]
 
 # Build frontend
 # FROM 

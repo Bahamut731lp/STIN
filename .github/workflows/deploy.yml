@@ -6,18 +6,13 @@ on:
     branches: ["master"]
 
 jobs:
-  request:
+  deployment:
     runs-on: ubuntu-latest
-    steps:      
-    - name: Axios Request
-      # You may pin to the exact commit or the version.
-      # uses: potaesm/github-actions-request@7c5145f0b707e9a1d7b7e71cf1812fcec2228fb5
-      uses: potaesm/github-actions-request@1.0.7
+    steps:
+    - name: Deploy Stage
+      uses: fjogeleit/http-request-action@v1
       with:
-        # `url` is the server URL that will be used for the request
         url: ${{ secrets.DEPLOY_IP }}
-        # `method` is the request method to be used when making the request
-        method: "POST"
-        content-type: application/json
-        # `data` is the data to be sent as the request body
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/json"}'
         data: ${{ secrets.DEPLOY_PASSWORD }}

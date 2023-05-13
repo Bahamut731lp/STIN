@@ -5,11 +5,8 @@ const env = await load();
 if (!env["PASSWORD"] || !env["USERNAME"]) throw new Error();
 
 async function runBuild() {
-    const process = Deno.run({
-        cmd: ["docker-compose", "up", "-d", "--force-recreate"]
-    });
-
-    await process.status();
+    const response = await new Deno.Command("docker-compose", { args: ["up", "-d", "--force-recreate"] }).output();
+    console.log(response)
 }
 
 async function handle(ctx: Context) {

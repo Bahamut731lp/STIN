@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master"]
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Stage
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: ${{ secrets.DEPLOY_IP }}
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/json"}'
+        data: ${{ secrets.DEPLOY_PASSWORD }}

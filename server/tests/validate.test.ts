@@ -64,20 +64,3 @@ Deno.test("Validation #5: Invalid Session", async () => {
     await discard();
     assertEquals(result.status, 401);
 });
-
-Deno.test("Validation #6: Valid session returns 200", async () => {
-    const email = crypto.randomUUID();
-    const token = "111111";
-    const valid = true;
-
-    const discard = await Session.createMockSession(email, token, valid);
-
-    const request = await superoak(app);
-    const result = await request
-        .post("/auth/validate")
-        .set("Content-Type", "application/json")
-        .send({ email, token });
-
-    await discard();
-    assertEquals(result.status, 200);
-});

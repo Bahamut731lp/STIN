@@ -7,7 +7,7 @@ import { Identifier } from "../interface/Account";
 
 interface CurrencyComboProps {
     onChange: (value: string) => void
-    account: Identifier
+    account?: Identifier
 }
 
 async function fetcher(url: string) {
@@ -22,7 +22,7 @@ async function fetcher(url: string) {
 
 export default function CurrencyCombo(props: CurrencyComboProps) {
     const [_accounts] = useContext(AccountsContext);
-    const index = Math.max(0, _accounts.findIndex((v) => v.identifier.prefix == props.account.prefix));
+    const index = Math.max(0, _accounts.findIndex((v) => v.identifier.prefix == (props.account?.prefix ?? "CZK")));
     const { data } = useSWR('/currencies', fetcher)
     const [selected, setSelected] = useState(data?.[index] ?? "CZK")
     const [query, setQuery] = useState('')

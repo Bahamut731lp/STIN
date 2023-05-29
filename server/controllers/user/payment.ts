@@ -2,6 +2,7 @@ import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 import User from "../../database/user.ts";
 import Headers from "../../database/headers.ts";
 import getConversion from "../../lib/getConversion.ts";
+import getOverdraft from "../../lib/getOverdraft.js";
 
 interface ExpectedBodyInterface {
     currency: string;
@@ -12,9 +13,9 @@ interface ExpectedBodyInterface {
 export async function post(context: Context) {
     const body = await context.request.body().value;
     const credentials = Headers.getAuthorization(context.request.headers.get("authorization"))
-    const { currency, amount, prefix } = body as Partial<ExpectedBodyInterface>;
+    const { currency, amount } = body as Partial<ExpectedBodyInterface>;
 
-    if (!credentials || !currency || !amount || !prefix) {
+    if (!credentials || !currency || !amount) {
         context.response.status = 400
         context.response.body = {
             data: null
@@ -33,60 +34,52 @@ export async function post(context: Context) {
         return;
     }
 
-    const account = await User.getAccountWithPrefix(credentials.email, prefix);
-    if (!account) {
-        context.response.status = 400
+    const accountWithTargetCurrency = user.accounts.find((acc) => acc.currency == currency);
+    const defaultAccount = user.accounts.find((acc) => acc.currency == "CZK");
+    const accountQueue = [accountWithTargetCurrency, defaultAccount];
+
+    // Na pořadí účtů tady záleží - první účet, kterým půjde zaplatit, použijeme
+    for (const account of accountQueue) {
+        if (!account) continue;
+
+        const conversion = await getConversion(currency, account.currency, account.amount);
+        const overdraft = getOverdraft(account.amount);
+        let paymentToBeMade = amount;
+        
+        if (account.currency != currency) paymentToBeMade = conversion?.result ?? paymentToBeMade;
+        if (amount > overdraft) continue;
+        if (!conversion) continue;
+
+        User.updateAccountWithPrefix(credentials.email, account.identifier.prefix, (document) => {
+            document.amount -= Math.abs(amount);
+            document.history.push({
+                type: "payment",
+                amount: amount,
+                date: new Date().toISOString(),
+                conversion: {
+                    from: currency,
+                    to: account.currency,
+                    rate: conversion.result / amount
+                }
+            })
+    
+            return document;
+        });
+    
+        context.response.status = 200
         context.response.body = {
-            title: "Account does not exist",
-            status: 400,
-            data: null
+            data: "ok",
+            status: 200
         };
+    
         return;
     }
 
-    const conversion = await getConversion(currency, account.data.currency, amount);
-    if (!conversion) {
-        context.response.status = 400
-        context.response.body = {
-            title: "Conversion failed",
-            status: 400,
-            data: null
-        };
-
-        return;
-    }
-
-    if (account.data.amount < conversion.result) {
-        context.response.status = 403
-        context.response.body = {
-            title: "Not enough balance",
-            status: 403,
-            data: null
-        };
-        return;
-    }
-
-
-    User.updateAccountWithPrefix(credentials.email, prefix, (document) => {
-        document.amount -= conversion.result;
-        document.history.push({
-            type: "payment",
-            amount: amount,
-            date: new Date().toISOString(),
-            conversion: {
-                from: currency,
-                to: user.accounts[account.index].currency,
-                rate: conversion.result / amount
-            }
-        })
-
-        return document;
-    });
-
-    context.response.status = 200
+    context.response.status = 403
     context.response.body = {
-        data: "ok",
-        status: 200
+        title: "Not enough balance",
+        status: 403,
+        data: null
     };
 
     return;

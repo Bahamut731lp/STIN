@@ -5,7 +5,7 @@ import DatabaseSchema from "./schema.ts";
 type Account = (DatabaseSchema["accounts"]) extends readonly (infer ElementType)[] ? ElementType : never;
 
 class User {
-    static async get(email: string) {
+    static async get(email: string): Promise<DatabaseSchema | null> {
         return await db.findOne((document) => document.user.email == email)
     }
 

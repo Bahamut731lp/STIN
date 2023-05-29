@@ -4,7 +4,6 @@ import { mutate } from "swr";
 import Account, { Identifier } from "../interface/Account";
 import Modal, { ModalProps } from "./Modal";
 import CurrencyCombo from "./CurrencyCombo";
-import AccountSelector from "./AccountSelector";
 import Button from "./Button";
 import Input from "./Input";
 import useNumber from "../lib/useNumber";
@@ -15,7 +14,6 @@ interface PaymentModalProps extends Pick<ModalProps, "isOpen" | "setIsOpen"> {
 }
 
 export default function PaymentModal(props: PaymentModalProps) {
-    const [account, setAccount] = useState<Identifier>({ bank: "0666", base: "", prefix: "" });
     const [currency, setCurrency] = useState("");
     const [value, setValue] = useNumber(0)
 
@@ -29,7 +27,6 @@ export default function PaymentModal(props: PaymentModalProps) {
                 "Authorization": `Basic ${btoa(`${email}:${token}`)}`
             },
             body: JSON.stringify({
-                "prefix": account.prefix,
                 "amount": value,
                 "currency": currency
             })
@@ -62,14 +59,6 @@ export default function PaymentModal(props: PaymentModalProps) {
                     </button>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <div>
-                        <AccountSelector
-                            onChange={(value) => setAccount(value)}
-                            active={props.active}
-                            data={props.accounts}
-                        />
-                    </div>
-
                     <div className="flex flex-col sm:flex-row gap-2 my-auto">
                         <Input
                             type="text"
@@ -78,7 +67,6 @@ export default function PaymentModal(props: PaymentModalProps) {
                         ></Input>
                         <div className="w-full sm:w-1/6">
                             <CurrencyCombo
-                                account={account}
                                 onChange={(value) => setCurrency(value)}
                             />
                         </div>

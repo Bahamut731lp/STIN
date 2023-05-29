@@ -2,7 +2,7 @@ import { Context } from "https://deno.land/x/oak@v11.1.0/context.ts";
 import User from "../../database/user.ts";
 import Headers from "../../database/headers.ts";
 import getConversion from "../../lib/getConversion.ts";
-import getOverdraft from "../../lib/getOverdraft.js";
+import getOverdraft from "../../lib/getOverdraft.ts";
 
 interface ExpectedBodyInterface {
     currency: string;
@@ -42,16 +42,16 @@ export async function post(context: Context) {
     for (const account of accountQueue) {
         if (!account) continue;
 
-        const conversion = await getConversion(currency, account.currency, account.amount);
-        const overdraft = getOverdraft(account.amount);
         let paymentToBeMade = amount;
+        const conversion = await getConversion(currency, account.currency, amount);
+        const overdraft = Math.max(0, getOverdraft(account.amount));
         
         if (account.currency != currency) paymentToBeMade = conversion?.result ?? paymentToBeMade;
         if (amount > overdraft) continue;
         if (!conversion) continue;
 
         User.updateAccountWithPrefix(credentials.email, account.identifier.prefix, (document) => {
-            document.amount -= Math.abs(amount);
+            document.amount -= Math.abs(paymentToBeMade);
             document.history.push({
                 type: "payment",
                 amount: amount,

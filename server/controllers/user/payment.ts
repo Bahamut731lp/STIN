@@ -77,8 +77,8 @@ export async function post(context: Context) {
 
     context.response.status = 403
     context.response.body = {
-        title: "Not enough balance",
-        status: 403,
+        title: "Error",
+        status: 500,
         data: null
     };
 

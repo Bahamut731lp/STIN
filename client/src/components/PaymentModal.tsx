@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { mutate } from "swr";
 
-import Account, { Identifier } from "../interface/Account";
+import Account from "../interface/Account";
 import Modal, { ModalProps } from "./Modal";
 import CurrencyCombo from "./CurrencyCombo";
 import Button from "./Button";

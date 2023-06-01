@@ -50,6 +50,8 @@ export async function post(context: Context) {
         if (amount > overdraft) continue;
         if (!conversion) continue;
 
+        if (amount > account.amount) paymentToBeMade -= (account.amount - paymentToBeMade) * 0.1;
+
         User.updateAccountWithPrefix(credentials.email, account.identifier.prefix, (document) => {
             document.amount -= Math.abs(paymentToBeMade);
             document.history.push({

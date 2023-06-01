@@ -46,10 +46,12 @@ export async function post(context: Context) {
         const conversion = await getConversion(currency, account.currency, amount);
         const overdraft = Math.max(0, getOverdraft(account.amount));
         
+        console.log(account, amount, overdraft);
         if (account.currency != currency) paymentToBeMade = conversion?.result ?? paymentToBeMade;
         if (!conversion) continue;
-        if (amount > account.amount) paymentToBeMade -= (account.amount - paymentToBeMade) * 0.1;
         if (paymentToBeMade > overdraft) continue;
+        if (amount > account.amount) paymentToBeMade -= (account.amount - paymentToBeMade) * 0.1;
+
 
         User.updateAccountWithPrefix(credentials.email, account.identifier.prefix, (document) => {
             document.amount -= Math.abs(paymentToBeMade);
